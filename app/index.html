@@ -23,7 +23,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div  ng-include="'views/main.html'" ng-controller="mapCtrl"></div>
+    <div class='container-fluid' ng-include="'views/main.html'" ng-controller="MapCtrl"></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -53,6 +53,9 @@
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/snap.svg.js"></script>
         <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/map.js"></script>
+        <script src="scripts/controllers/filter.js"></script>
+        <script src="scripts/directives/map.js"></script>
         <!-- endbuild -->
 </body>
 </html>

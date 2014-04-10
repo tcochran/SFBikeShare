@@ -1,9 +1,22 @@
+<div class='row'>
+    <div class="col-lg-9">
         <div id='map'></div>
+        <svg map id='svg' ng-if='stations && trips' filter='filter' stations='stations' stats='stats' trips='trips' start=' registerAnimation'></svg>
 
-        <svg map id='svg' ng-if='stations && trips' stations='stations' stats='stats' trips='trips' start='registerAnimation'></svg>
-<div style='z-index: 2000; position:absolute; right: 10px; top: 20px; text-align: right;' ng-show='stats.minutes' class='ng-hide'>
-        <h1>San Francisco</h1>
-        <h3>{{stats.testDate | date:'fullDate' }} </h3>
-        <h3>{{stats.testDate + (stats.minutes * 60 * 1000) | date:'shortTime' }} </h3>
-        <h3>{{stats.numBikes}} Bike Trips</h3>
     </div>
+
+    <div class="col-lg-3">
+        <div style='z-index: 2000;' ng-show='stats.minutes' class='ng-hide'>
+            <h1>San Francisco</h1>
+            <h3>{{stats.testDate | date:'fullDate' }} </h3>
+            <h3>{{stats.testDate + (stats.minutes * 60 * 1000) | date:'shortTime' }} </h3>
+            <h3>{{stats.numBikes}} Bike Trips</h3>
+            <ng-include src="'views/filter.html'"></ng-include>
+        </div>
+    </div>
+</div>
+
+
+
+
+
