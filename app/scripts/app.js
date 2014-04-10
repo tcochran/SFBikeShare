@@ -41,7 +41,7 @@ angular.module('sf_bikes', [])
                     .attr("width", width)
                     .attr("height", height);
 
-                d3.json("/data/bayarea.geojson", function(error, uk) {
+                d3.json("data/bayarea.geojson", function(error, uk) {
                     svg.append("path")
                         .attr("id", "states")
                         .datum(uk)
@@ -131,7 +131,7 @@ angular.module('sf_bikes', [])
 })
 
 .service('Stations', function($http) {
-    var stationsPromise = $http.get('/data/stations.json').then(function(response){
+    var stationsPromise = $http.get('data/stations.json').then(function(response){
         return response.data;
     })
 
@@ -162,7 +162,7 @@ angular.module('sf_bikes', [])
 
 .service('Trips', function($http, Stations, $q, TestDate, TestDateString){
 
-    var tripsPromise = $http.get('/data/trips.json').then(function(response){
+    var tripsPromise = $http.get('data/trips.json').then(function(response){
         return response.data;
     })
     this.all = function() {
