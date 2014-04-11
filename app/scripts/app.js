@@ -2,31 +2,31 @@
 
 angular.module('sf_bikes', [])
 
-.service('Stations', function($http) {
-    var stationsPromise = $http.get('data/stations.json').then(function(response){
-        return response.data;
+    .service('Stations', function($http) {
+        var stationsPromise = $http.get('data/stations.json').then(function(response){
+            return response.data;
+        });
+
+        this.all = function() {
+            return stationsPromise;
+        }
+
+        this.sf = function() {
+            return stationsPromise.then(function(stations) {
+                return stations.filter(function(station){
+                    return station.landmark == 'San Francisco';
+                });
+            })
+        }
+
+        this.sanJose = function() {
+            return stationsPromise.then(function(stations) {
+                return stations.filter(function(station){
+                    return station.landmark == 'San Jose';
+                });
+            })
+        }
     })
-
-    this.all = function() {
-        return stationsPromise;
-    }
-
-    this.sf = function() {
-        return stationsPromise.then(function(stations) {
-            return stations.filter(function(station){
-                return station.landmark == 'San Francisco';
-            });
-        })
-    }
-
-    this.sanJose = function() {
-        return stationsPromise.then(function(stations) {
-            return stations.filter(function(station){
-                return station.landmark == 'San Jose';
-            });
-        })
-    }
-})
 
 
 .service('Trips', function($http, Stations, $q){
