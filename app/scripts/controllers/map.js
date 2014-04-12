@@ -21,5 +21,9 @@ angular.module('sf_bikes')
     Stations.all().then(function(stations) {
         $scope.stations = stations;
     });
+
+    Trips.dailyTotal().then(function(totals) {
+        console.log(totals);
+    });
     
 });

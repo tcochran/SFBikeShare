@@ -107,7 +107,8 @@ body {
     fill: orange;
 }
 
-#stations-svg { position: absolute; top: 0; background-color: none;}
-#trips-svg { position: absolute; top: 0; background-color: none;}
+#stations-svg { position: absolute; top: 0; background-color: none; width: 1000px; height: 800px;}
+#trips-svg { position: absolute; top: 0; background-color: none; width: 1000px; height: 800px;}
 .speed-slider { position: relative; }
 .speed-slider .fast-slider { position: absolute; right: 0px; display: inline-block;}
+input[type=range] { display: inline-block; }

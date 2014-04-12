@@ -49,6 +49,8 @@ angular.module('sf_bikes')
         var location1 = projection([trip.startStation.long, trip.startStation.lat]);
         var location2 = projection([trip.endStation.long, trip.endStation.lat]);
 
+        console.log(duration);
+
         var line = tripsSvg.line(location1[0], location1[1], location1[0], location1[1]);
         line.attr({
             stroke: "#333",
