@@ -28,7 +28,6 @@ angular.module('sf_bikes')
 
     Trips.dateList().then(function(dateList) {
         $scope.dateList = dateList;
-        console.log(dateList);
     });
 
 

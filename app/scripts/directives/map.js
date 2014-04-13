@@ -7,12 +7,22 @@ angular.module('sf_bikes')
         .scale(850000)
         .translate([width / 2, height / 2]); 
 
-    var stationsSvg;
-    var tripsSvg;
+    var s;
+    var labelsGroup;
+    var stationsGroup;
+    var tripsGroup;
+    
+
+
 
     this.drawMap = function () {
-        stationsSvg = Snap("#stations-svg");
-        tripsSvg = Snap("#trips-svg");
+        s = Snap("#stations-svg");
+        
+        tripsGroup = s.g();
+        stationsGroup = s.g();
+        labelsGroup = s.g();
+        
+        
         
         var svg = d3.select("#map").append("svg")
             .attr("width", width)
@@ -26,10 +36,9 @@ angular.module('sf_bikes')
         });
     };
 
-
     this.drawStation = function (station) {
         var location = projection([station.long, station.lat]);
-        var circle = stationsSvg.circle(location[0], location[1], 8);
+        var circle = stationsGroup.circle(location[0], location[1], 8);
 
         circle.attr({
             fill: "#bada55",
@@ -37,10 +46,55 @@ angular.module('sf_bikes')
             strokeWidth: 0,
             zIndex: '9999'
         });
+
+        var marginTop = 24;
+
+        var label = labelsGroup.group();
+        var stationName = label.rect();
+
+        var text = label.text(location[0], location[1] - marginTop , station.name);
+
+        text.attr({
+            width: '100px',
+            textAnchor: "middle",
+            opacity: "#333",
+            fontSize: "16px",
+            fontWeight: 'bold'
+        });
+        var bb = text.getBBox();
+
+        var paddingX = 10;
+        var paddingY = 6;
+
+        stationName.attr({
+            fill: "#DDD",
+            stroke: "#CCC",
+            opacity: 0.5,
+            x: bb.x - paddingX,
+            y: bb.y - paddingY,
+            width: bb.width + (paddingX * 2),
+            height: bb.height + (paddingY * 2)
+        });
+
+        label.attr({
+            display: 'none'
+        })
+
+        var hoverIn = function() {
+            circle.attr({ fill: 'steelblue' })
+            label.attr({ display: 'inherit' });
+
+        };
+
+        var hoverOut = function() {
+            circle.attr({ fill: "#bada55" })
+            label.attr({ display: 'none' });
+        }
+        circle.hover(hoverIn, hoverOut);
     };
 
     this.clearTrips = function() {
-        tripsSvg.clear();
+        tripsGroup.clear();
     };
 
     this.drawTrip = function(trip, duration) {
@@ -48,14 +102,14 @@ angular.module('sf_bikes')
         var location1 = projection([trip.startStation.long, trip.startStation.lat]);
         var location2 = projection([trip.endStation.long, trip.endStation.lat]);
 
-        var line = tripsSvg.line(location1[0], location1[1], location1[0], location1[1]);
+        var line = tripsGroup.line(location1[0], location1[1], location1[0], location1[1]);
         line.attr({
             stroke: "#333",
             strokeWidth: 3,
             opacity: 0.25,
             strokeOpacity: 0.25,
         });
-        var circle = tripsSvg.circle(location1[0], location1[1], 4);
+        var circle = tripsGroup.circle(location1[0], location1[1], 4);
 
         circle.attr({
             fill: "#82C7BC",
@@ -175,18 +229,13 @@ angular.module('sf_bikes')
         },
         link: function(scope, element) {
             
-            data = scope.totals;
-
-            
-
-            // data = [[1, 500], [2, 600], [3, 100], [4, 300], [5, 200]]
+            data = scope.totals
 
             var margin = {top: 50, right: 20, bottom: 30, left: 50},
                 width = 1400 - margin.left - margin.right,
                 height = 300 - margin.top - margin.bottom;
 
             var x = d3.scale.linear()
-                // .rangeRoundBands([0, width], .1);
 
             var y = d3.scale.linear()
                 .range([height, 0]);
@@ -228,7 +277,7 @@ angular.module('sf_bikes')
                   .data(data)
                 .enter().append("rect")
                   .attr("class", "bar")
-                  .attr("x", function(d) { console.log("x", x(d[0] / 1000 / 60)); return (x(d[0]) * 7)  ; }  )
+                  .attr("x", function(d) { return (x(d[0]) * 7)  ; }  )
                   .attr("width", 6)
                   .attr("y", function(d) { return y(d[1]); })
                   .attr("height", function(d) { return height - y(d[1]); });
