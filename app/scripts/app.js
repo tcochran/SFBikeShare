@@ -52,7 +52,8 @@ angular.module('sf_bikes', [])
 
             var dateString = trip['Start Date'].split(' ')[0];
 
-            trip.date = Date.parse(dateString);
+            trip.date = Number(Date.parse(dateString));
+
 
             return trip;
         });
@@ -79,18 +80,22 @@ angular.module('sf_bikes', [])
 
 
     this.dailyTotal = function() {
+
         return translatedPromise.then(function(trips) {
             return trips.reduce(function(totals, trip) {
                 if (!(trip.date in totals)) {
                     totals[trip.date] = 0;
                 }
-
                 totals[trip.date] = totals[trip.date] + 1;
-
                 return totals;
             }, {});
 
-        })
+        }).then(function(totals) {
+            var keys = Object.keys(totals);
+            var values = keys.map(function(key) { return [Number(key), totals[key]]; });
+
+            return values.sort(function(tuple1, tuple2){ return tuple1[0] - tuple2[0] });
+        });
 
     }
 });

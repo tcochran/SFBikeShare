@@ -23,7 +23,9 @@ angular.module('sf_bikes')
     });
 
     Trips.dailyTotal().then(function(totals) {
-        console.log(totals);
+        $scope.daily_totals = totals;
     });
+
+
     
 });

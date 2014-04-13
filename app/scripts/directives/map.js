@@ -167,3 +167,93 @@ angular.module('sf_bikes')
         }
     }
 })
+
+
+.directive('dailyTotals', function() {
+
+    return {
+        scope: {
+            totals: '=',
+            
+        },
+        link: function(scope, element) {
+            
+            data = scope.totals;
+
+            
+
+            // data = [[1, 500], [2, 600], [3, 100], [4, 300], [5, 200]]
+
+            var margin = {top: 50, right: 20, bottom: 30, left: 50},
+                width = 1400 - margin.left - margin.right,
+                height = 300 - margin.top - margin.bottom;
+
+            var x = d3.scale.linear()
+                // .rangeRoundBands([0, width], .1);
+
+            var y = d3.scale.linear()
+                .range([height, 0]);
+
+            var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .ticks(2);
+
+            var svg = d3.select(".bar-chart").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(0" + margin.left + "," + margin.top + ")");
+            // d3.json(scope.totals, type, function(error, data) {
+                console.log(data);
+                //[d3.min(scope.totals, function(v){ return v[0]; }), d3.max(scope.totals, function(v){ return v[0]; })]
+              x.domain(data.map(function(d) { return d[0]; }));
+              y.domain([0, 1300]);
+
+              svg.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + height + ")")
+                  // .attr("transform", "rotate(-90)")
+                  .call(xAxis)
+                  .selectAll("text").remove();
+
+              svg.append("g")
+                  .attr("class", "y axis")
+                  // .attr("dy", "-20em")
+                  // .attr("y",50)
+                  .call(yAxis)
+                  // .selectAll("text").remove()
+                .append("text")
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 10)
+                  .attr("dy", "-1.91em")
+                  .style("text-anchor", "end");
+
+                  console.log("start x", x(1377748800000));
+              svg.selectAll(".bar")
+                  .data(data)
+                .enter().append("rect")
+                  .attr("class", "bar")
+                  // .attr("x", function(d) { console.log("x", d[0] / 1000 / 60); return x(d[0] / 1000 / 60 ); }  )
+                  .attr("x", function(d) { console.log("x", x(d[0] / 1000 / 60)); return (x(d[0]) * 7)  ; }  )
+                  .attr("width", 6)
+                  .attr("y", function(d) { return y(d[1]); })
+                  .attr("height", function(d) { return height - y(d[1]); });
+            
+
+            // });
+            // };
+//             1377748800000
+// 1377835200000
+// 1377921600000
+// 1378008000000
+// 1378094400000
+
+        }
+    };
+});

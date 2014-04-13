@@ -112,3 +112,28 @@ body {
 .speed-slider { position: relative; }
 .speed-slider .fast-slider { position: absolute; right: 0px; display: inline-block;}
 input[type=range] { display: inline-block; }
+
+.axis path {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+  font: 10px sans-serif;
+}
+
+.x.axis path {
+  display: none;
+}
+
+
+.bar {
+  fill: orangered;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+.trip-date {
+    width: 220px;
+    height: 248px;
+}
