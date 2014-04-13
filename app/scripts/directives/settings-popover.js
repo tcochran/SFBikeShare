@@ -13,7 +13,6 @@ angular.module('sf_bikes')
                 html: true,
                 content: $(".settings-popover-content").html()
             }).on('shown.bs.popover', function () {
-                console.log(scope);
                     
                 $(".trip-date").datepicker({
                     beforeShowDay: function(date) {
@@ -25,7 +24,6 @@ angular.module('sf_bikes')
 
                 $('.trip-date').datepicker('show')
                 .on('changeDate', function(dateEvent) {
-                    console.log("changeDate", dateEvent);
                     scope.date = dateEvent.date.toString();
                     element.popover('hide');
                 });
