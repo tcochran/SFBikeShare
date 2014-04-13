@@ -26,6 +26,11 @@ angular.module('sf_bikes')
         $scope.daily_totals = totals;
     });
 
+    Trips.dateList().then(function(dateList) {
+        $scope.dateList = dateList;
+        console.log(dateList);
+    });
+
 
     
 });

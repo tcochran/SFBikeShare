@@ -29,7 +29,6 @@ angular.module('sf_bikes')
 
     this.drawStation = function (station) {
         var location = projection([station.long, station.lat]);
-        console.log(location);
         var circle = stationsSvg.circle(location[0], location[1], 8);
 
         circle.attr({
@@ -48,8 +47,6 @@ angular.module('sf_bikes')
 
         var location1 = projection([trip.startStation.long, trip.startStation.lat]);
         var location2 = projection([trip.endStation.long, trip.endStation.lat]);
-
-        console.log(duration);
 
         var line = tripsSvg.line(location1[0], location1[1], location1[0], location1[1]);
         line.attr({
@@ -209,50 +206,32 @@ angular.module('sf_bikes')
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", "translate(0" + margin.left + "," + margin.top + ")");
-            // d3.json(scope.totals, type, function(error, data) {
-                console.log(data);
-                //[d3.min(scope.totals, function(v){ return v[0]; }), d3.max(scope.totals, function(v){ return v[0]; })]
               x.domain(data.map(function(d) { return d[0]; }));
               y.domain([0, 1300]);
 
               svg.append("g")
                   .attr("class", "x axis")
                   .attr("transform", "translate(0," + height + ")")
-                  // .attr("transform", "rotate(-90)")
                   .call(xAxis)
                   .selectAll("text").remove();
 
               svg.append("g")
                   .attr("class", "y axis")
-                  // .attr("dy", "-20em")
-                  // .attr("y",50)
                   .call(yAxis)
-                  // .selectAll("text").remove()
                 .append("text")
                   .attr("transform", "rotate(-90)")
                   .attr("y", 10)
                   .attr("dy", "-1.91em")
                   .style("text-anchor", "end");
 
-                  console.log("start x", x(1377748800000));
               svg.selectAll(".bar")
                   .data(data)
                 .enter().append("rect")
                   .attr("class", "bar")
-                  // .attr("x", function(d) { console.log("x", d[0] / 1000 / 60); return x(d[0] / 1000 / 60 ); }  )
                   .attr("x", function(d) { console.log("x", x(d[0] / 1000 / 60)); return (x(d[0]) * 7)  ; }  )
                   .attr("width", 6)
                   .attr("y", function(d) { return y(d[1]); })
                   .attr("height", function(d) { return height - y(d[1]); });
-            
-
-            // });
-            // };
-//             1377748800000
-// 1377835200000
-// 1377921600000
-// 1378008000000
-// 1378094400000
 
         }
     };

@@ -98,6 +98,18 @@ angular.module('sf_bikes', [])
         });
 
     }
+
+    this.dateList = function() {
+        return translatedPromise.then(function(trips) {
+            return trips.reduce(function(dates, trip) {
+                if (dates.indexOf(trip.date) == -1) {
+                    dates.push(trip.date)
+                }
+                return dates;
+            }, []);
+
+        })
+    }
 });
 
 
