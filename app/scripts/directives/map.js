@@ -47,12 +47,20 @@ angular.module('sf_bikes')
             zIndex: '9999'
         });
 
-        var marginTop = 24;
+        var marginTop = 44;
 
         var label = labelsGroup.group();
         var stationName = label.rect();
 
-        var text = label.text(location[0], location[1] - marginTop , station.name);
+        var textGroup = label.group();
+
+        var text = textGroup.text(location[0], location[1] - marginTop, station.name);
+
+        text.selectAll("tspan:nth-child(n+2)").attr({
+            dy: "1.2em",
+            textAnchor: "left",
+            x: location[0]
+        });
 
         text.attr({
             width: '100px',
@@ -61,7 +69,10 @@ angular.module('sf_bikes')
             fontSize: "16px",
             fontWeight: 'bold'
         });
-        var bb = text.getBBox();
+        var textb = text.getBBox();
+        var textDockCount = textGroup.text(textb.x, textb.y2 + textb.height, "Dock Count: " + station.dockcount);
+
+        var bb = textGroup.getBBox(); 
 
         var paddingX = 10;
         var paddingY = 6;
