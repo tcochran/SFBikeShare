@@ -79,16 +79,16 @@ angular.module('sf_bikes', [])
         });
     });
 
-    this.all = function(filterDateString, city) {
+    this.all = function(filterDateString, cities) {
 
         var filterDate = Date.parse(filterDateString);
 
         return translatedPromise.then(function(trips) {
             return trips.filter(function(trip){
                 var dateString = trip['Start Date'].split(' ')[0];
-                // return trip.startStation.landmark === city
-                //     && trip.endStation.landmark === city 
-                return trip.date === filterDate;
+                return cities.indexOf(trip.startStation.landmark) != -1
+                    && cities.indexOf(trip.endStation.landmark) != -1 
+                    && trip.date === filterDate;
             }).map(function(trip) {
                 var ms = Date.parse(trip['Start Date']);
                 trip.duration = trip.Duration / 60;

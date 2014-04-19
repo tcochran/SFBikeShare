@@ -4,6 +4,12 @@ angular.module('sf_bikes')
 
     var width = 1040, height = 900;
 
+    var clearBaseMap = function() {
+        if ($('#map svg')) {
+            $("#map svg").remove();
+        }
+    }
+
     var san_francisco = {
 
         projection: d3.geo.mercator()
@@ -12,6 +18,7 @@ angular.module('sf_bikes')
             .translate([width / 2, height / 2])
         ,
         drawBaseMap: function() {
+
             var svg = d3.select("#map").append("svg")
                 .attr("width", width)
                 .attr("height", height);
@@ -34,6 +41,7 @@ angular.module('sf_bikes')
             .translate([width / 2, height / 2])
         ,
         drawBaseMap: function() {
+            
         }
     };
 
@@ -44,6 +52,7 @@ angular.module('sf_bikes')
             .translate([width / 2, height / 2])
         ,
         drawBaseMap: function() {
+
         }
     };
 
@@ -54,6 +63,8 @@ angular.module('sf_bikes')
             .translate([width / 2, height / 2])
         ,
         drawBaseMap: function() {
+            
+
             var svg = d3.select("#map").append("svg")
                 .attr("width", width)
                 .attr("height", height);
@@ -83,30 +94,33 @@ angular.module('sf_bikes')
     var stationsGroup;
     var tripsGroup;
 
+
+
     this.drawMap = function (city_name) {
 
         city = cities[city_name];
         projection = city.projection;
-        s = Snap("#stations-svg");
-        
-        tripsGroup = s.g();
-        stationsGroup = s.g();
-        labelsGroup = s.g();
+
+        if (!s){
+            s = Snap("#stations-svg");
+            
+            tripsGroup = s.g();
+            stationsGroup = s.g();
+            labelsGroup = s.g();
+        }
+
+        tripsGroup.clear();
+        stationsGroup.clear();
+        labelsGroup.clear();
+
+        clearBaseMap();
 
         city.drawBaseMap();
     };
 
     this.drawStation = function (station) {
 
-        // var projection = function(longlat) {
-            
-        //     var point = map.latLngToLayerPoint(L.latLng(longlat[1], longlat[0]))
-        //     return [point.x, point.y];
-        // }
-
-
         var location = projection([station.long, station.lat]);
-        console.log(location);
         var circle = stationsGroup.circle(location[0], location[1], 8);
 
         circle.attr({
@@ -190,10 +204,10 @@ angular.module('sf_bikes')
 
         var line = tripsGroup.line(location1[0], location1[1], location1[0], location1[1]);
         line.attr({
-            stroke: "black",
+            stroke: "#333333",
             strokeWidth: 3,
             opacity: 0.25,
-            strokeOpacity: 0.5,
+            strokeOpacity: 0.25,
         });
         var circle = tripsGroup.circle(location1[0], location1[1], 4);
 

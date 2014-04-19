@@ -7,22 +7,30 @@ angular.module('sf_bikes')
 
     $scope.filter = {speed: '12', date: '1/21/2014', cities: ['Redwood City']};
     $scope.data = {};
+    $scope.title = "San Francisco";
 
     $scope.$watch('filter.cities', function(cities) {
+
+        $scope.title = cities.join(" / ");
 
         Stations.find(cities).then(function(stations) {
             $scope.stations = stations;
         });
 
-    });
-
-    $scope.$watch('filter', function(filter) {
-        Trips.all(filter.date, filter.city).then(function(trips) {
+        Trips.all($scope.filter.date, $scope.filter.cities).then(function(trips) {
             $scope.data.trips = trips;
         }); 
 
-        $scope.stats = {testDate: Date.parse(filter.date)};    
-    }, true);
+
+    });
+
+    $scope.$watch('filter.date', function(date) {
+        Trips.all($scope.filter.date, $scope.filter.cities).then(function(trips) {
+            $scope.data.trips = trips;
+        }); 
+
+        $scope.stats = {testDate: Date.parse($scope.filter.date)};    
+    });
 
     
     // Trips.dailyTotal().then(function(totals) {
