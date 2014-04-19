@@ -9,6 +9,18 @@
 
 module.exports = function (grunt) {
 
+  grunt.registerTask('genGeoJSON', 'Log some stuff.', function() {
+    var fs = require('fs')
+    var files = fs.readdirSync('maps')
+
+    var sys = require('sys')
+    var exec = require('child_process').exec;
+
+    files.forEach(function(file) {
+      // exec("ogr2ogr -f \"GeoJSON\" -t_srs \"CRS:84\" " + file + ".json " + file); 
+    })
+  });
+
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
@@ -58,6 +70,11 @@ module.exports = function (grunt) {
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
+      },
+
+      shapefiles: {
+        files: 'maps/{,*/}*.shp',
+        tasks: ['genGeoJSON']
       }
     },
 

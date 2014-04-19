@@ -137,3 +137,23 @@ input[type=range] { display: inline-block; }
     width: 220px;
     height: 248px;
 }
+
+.city-button {
+    margin-bottom: 10px;
+}
+
+#san-jose-svg text {
+    
+    stroke: none;
+    stroke-width: 0.1px;
+    font-size: 6px;
+    font-color: #bbbbbb;
+    fill: #777;
+    display: none;
+}
+
+#san-jose-svg path, #san-jose-svg line {
+    
+    stroke: #777;
+    stroke-width: 0.25px;
+}

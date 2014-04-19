@@ -11,21 +11,41 @@ angular.module('sf_bikes', [])
         return stationsPromise;
     };
 
-    this.sf = function() {
+    this.find = function(cities) {
         return stationsPromise.then(function(stations) {
             return stations.filter(function(station){
-                return station.landmark === 'San Francisco';
+                return cities.indexOf(station.landmark) != -1;
             });
         });
     };
+    var self = this;
+    this.findLimits = function(city) {
 
-    this.sanJose = function() {
-        return stationsPromise.then(function(stations) {
-            return stations.filter(function(station){
-                return station.landmark === 'San Jose';
-            });
-        });
-    };
+        this.find(city).then(self.limit);
+    }
+
+    this.limit = function(stations) {
+        var left;
+        var right;
+        var top;
+        var bottom;
+
+        var min = function(arr) { return Math.min.apply(null, arr); };
+        var max = function(arr) { return Math.max.apply(null, arr); };
+        console.log(stations);
+        var longs = stations.map(function(station) { return station.long; });
+        var lats = stations.map(function(station) { return station.lat; });
+        
+        left = min(longs)
+        right = max(longs)
+
+        top = min(lats)
+        bottom = max(lats)
+
+        console.log(left, right, top, bottom);
+
+    }
+
 })
 
 
@@ -59,16 +79,16 @@ angular.module('sf_bikes', [])
         });
     });
 
-    this.all = function(filterDateString) {
+    this.all = function(filterDateString, city) {
 
         var filterDate = Date.parse(filterDateString);
 
         return translatedPromise.then(function(trips) {
             return trips.filter(function(trip){
                 var dateString = trip['Start Date'].split(' ')[0];
-                return trip.startStation.landmark === 'San Francisco' 
-                    && trip.endStation.landmark === 'San Francisco' 
-                    && trip.date === filterDate;
+                // return trip.startStation.landmark === city
+                //     && trip.endStation.landmark === city 
+                return trip.date === filterDate;
             }).map(function(trip) {
                 var ms = Date.parse(trip['Start Date']);
                 trip.duration = trip.Duration / 60;

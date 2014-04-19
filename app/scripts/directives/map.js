@@ -1,139 +1,186 @@
 angular.module('sf_bikes')
 
-.service('graphics', function() {
-    var width = 1040, height = 900;
-    var projection = d3.geo.mercator()
-        .center([-122.4067, 37.7879])
-        .scale(850000)
-        .translate([width / 2, height / 2]); 
+// .service('graphics', function() {
+//     var width = 1280, height = 800;
+//     var projection = d3.geo.mercator()
+//         .center([-121.888979, 37.330698])
+//         // .center([-122.3827, 37.7879])
 
-    var s;
-    var labelsGroup;
-    var stationsGroup;
-    var tripsGroup;
+//         .scale(900000)
+//         // .scale(40000)
+//         .translate([width / 2, height / 2]); 
+
+//     var s;
+//     var labelsGroup;
+//     var stationsGroup;
+//     var tripsGroup;
+
+
     
 
 
 
-    this.drawMap = function () {
-        s = Snap("#stations-svg");
+//     this.drawMap = function () {
+
+//         // map = L.map('l-map', { zoomControl:false}).setView([37.330698, -121.888979], 14);
+
+// //         map.dragging.disable();
+// //         map.touchZoom.disable();
+// //         map.doubleClickZoom.disable();
+// //         map.scrollWheelZoom.disable();
+
+// // // add an OpenStreetMap tile layer
+// // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+// //     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+// // }).addTo(map);
+
+
+
+//         s = Snap("#stations-svg");
         
-        tripsGroup = s.g();
-        stationsGroup = s.g();
-        labelsGroup = s.g();
+//         tripsGroup = s.g();
+//         stationsGroup = s.g();
+//         labelsGroup = s.g();
+
+
         
         
-        
-        var svg = d3.select("#map").append("svg")
-            .attr("width", width)
-            .attr("height", height);
+//         var svg = d3.select("#map").append("svg")
+//             .attr("width", width)
+//             .attr("height", height);
 
-        d3.json("data/bayarea.geojson", function(error, uk) {
-            svg.append("path")
-                .attr("id", "states")
-                .datum(uk)
-                .attr("d", d3.geo.path().projection(projection));
-        });
-    };
+//         // d3.json("data/sanjose2.geojson", function(error, uk) {
+//         //     svg.append("path")
+//         //         .attr("id", "states")
+//         //         .datum(uk)
+//         //         .attr("d", d3.geo.path().projection(projection));
+//         // });
 
-    this.drawStation = function (station) {
-        var location = projection([station.long, station.lat]);
-        var circle = stationsGroup.circle(location[0], location[1], 8);
+//         // var svg = d3.select("#map").append("svg")
+//         //     .attr("width", width)
+//         //     .attr("height", height);
 
-        circle.attr({
-            fill: "#bada55",
-            stroke: "#000",
-            strokeWidth: 0,
-            zIndex: '9999'
-        });
+//         // d3.json("data/bayarea.geojson", function(error, uk) {
+//         //     svg.append("path")
+//         //         .attr("id", "states")
+//         //         .datum(uk)
+//         //         .attr("d", d3.geo.path().projection(projection));
+//         // });
+//     };
 
-        var marginTop = 44;
+//     this.drawStation = function (station) {
 
-        var label = labelsGroup.group();
-        var stationName = label.rect();
-
-        var textGroup = label.group();
-
-        var text = textGroup.text(location[0], location[1] - marginTop, station.name);
-
-        text.selectAll("tspan:nth-child(n+2)").attr({
-            dy: "1.2em",
-            textAnchor: "left",
-            x: location[0]
-        });
-
-        text.attr({
-            width: '100px',
-            textAnchor: "middle",
-            opacity: "#333",
-            fontSize: "16px",
-            fontWeight: 'bold'
-        });
-        var textb = text.getBBox();
-        var textDockCount = textGroup.text(textb.x, textb.y2 + textb.height, "Dock Count: " + station.dockcount);
-
-        var bb = textGroup.getBBox(); 
-
-        var paddingX = 10;
-        var paddingY = 6;
-
-        stationName.attr({
-            fill: "#DDD",
-            stroke: "#CCC",
-            opacity: 0.5,
-            x: bb.x - paddingX,
-            y: bb.y - paddingY,
-            width: bb.width + (paddingX * 2),
-            height: bb.height + (paddingY * 2)
-        });
-
-        label.attr({
-            display: 'none'
-        })
-
-        var hoverIn = function() {
-            circle.attr({ fill: 'steelblue' })
-            label.attr({ display: 'inherit' });
-
-        };
-
-        var hoverOut = function() {
-            circle.attr({ fill: "#bada55" })
-            label.attr({ display: 'none' });
-        }
-        circle.hover(hoverIn, hoverOut);
-    };
-
-    this.clearTrips = function() {
-        tripsGroup.clear();
-    };
-
-    this.drawTrip = function(trip, duration) {
-
-        var location1 = projection([trip.startStation.long, trip.startStation.lat]);
-        var location2 = projection([trip.endStation.long, trip.endStation.lat]);
-
-        var line = tripsGroup.line(location1[0], location1[1], location1[0], location1[1]);
-        line.attr({
-            stroke: "#333",
-            strokeWidth: 3,
-            opacity: 0.25,
-            strokeOpacity: 0.25,
-        });
-        var circle = tripsGroup.circle(location1[0], location1[1], 4);
-
-        circle.attr({
-            fill: "#82C7BC",
-            stroke: "#000",
-            strokeWidth: 0,
-        });
+//         // var projection = function(longlat) {
             
-        circle.animate({cx: location2[0], cy: location2[1]}, duration, null, function(){
-            circle.remove();
-        });
-        line.animate({x2: location2[0], y2: location2[1]}, duration);
-    };
-})
+//         //     var point = map.latLngToLayerPoint(L.latLng(longlat[1], longlat[0]))
+//         //     return [point.x, point.y];
+//         // }
+
+
+//         var location = projection([station.long, station.lat]);
+//         console.log(location);
+//         var circle = stationsGroup.circle(location[0], location[1], 10);
+
+//         circle.attr({
+//             fill: "#bada55",
+//             stroke: "#000",
+//             strokeWidth: 0,
+//             zIndex: '9999'
+//         });
+
+//         var marginTop = 44;
+
+//         var label = labelsGroup.group();
+//         var stationName = label.rect();
+
+//         var textGroup = label.group();
+
+//         var text = textGroup.text(location[0], location[1] - marginTop, station.name);
+
+//         text.selectAll("tspan:nth-child(n+2)").attr({
+//             dy: "1.2em",
+//             textAnchor: "left",
+//             x: location[0]
+//         });
+
+//         text.attr({
+//             width: '100px',
+//             textAnchor: "middle",
+//             opacity: "#333",
+//             fontSize: "16px",
+//             fontWeight: 'bold'
+//         });
+//         var textb = text.getBBox();
+//         var textDockCount = textGroup.text(textb.x, textb.y2 + textb.height, "Dock Count: " + station.dockcount);
+
+//         var bb = textGroup.getBBox(); 
+
+//         var paddingX = 10;
+//         var paddingY = 6;
+
+//         stationName.attr({
+//             fill: "#DDD",
+//             stroke: "#CCC",
+//             opacity: 0.5,
+//             x: bb.x - paddingX,
+//             y: bb.y - paddingY,
+//             width: bb.width + (paddingX * 2),
+//             height: bb.height + (paddingY * 2)
+//         });
+
+//         label.attr({
+//             display: 'none'
+//         })
+
+//         var hoverIn = function() {
+//             circle.attr({ fill: 'steelblue' })
+//             label.attr({ display: 'inherit' });
+
+//         };
+
+//         var hoverOut = function() {
+//             circle.attr({ fill: "#bada55" })
+//             label.attr({ display: 'none' });
+//         }
+//         circle.hover(hoverIn, hoverOut);
+//     };
+
+//     this.clearTrips = function() {
+//         tripsGroup.clear();
+//     };
+
+//     this.drawTrip = function(trip, duration) {
+
+//         // var projection = function(longlat) {
+            
+//         //     var point = map.latLngToLayerPoint(L.latLng(longlat[1], longlat[0]))
+//         //     return [point.x, point.y];
+//         // }
+
+//         var location1 = projection([trip.startStation.long, trip.startStation.lat]);
+//         var location2 = projection([trip.endStation.long, trip.endStation.lat]);
+
+//         var line = tripsGroup.line(location1[0], location1[1], location1[0], location1[1]);
+//         line.attr({
+//             stroke: "black",
+//             strokeWidth: 3,
+//             opacity: 0.25,
+//             strokeOpacity: 0.5,
+//         });
+//         var circle = tripsGroup.circle(location1[0], location1[1], 4);
+
+//         circle.attr({
+//             fill: "#82C7BC",
+//             stroke: "#000",
+//             strokeWidth: 0,
+//         });
+            
+//         circle.animate({cx: location2[0], cy: location2[1]}, duration, null, function(){
+//             circle.remove();
+//         });
+//         line.animate({x2: location2[0], y2: location2[1]}, duration);
+//     };
+// })
 
 .directive('map', function($interval, graphics) {
     return {
@@ -148,15 +195,28 @@ angular.module('sf_bikes')
 
             var allTrips = null;
             
-            graphics.drawMap();
 
-            scope.stations.map(function(station) {
-                graphics.drawStation(station);
-            });
+            
+
+            scope.$watch('stations', function(newStations){
+                if (newStations == null)
+                    return;
+
+                console.log("load stations");
+
+                graphics.drawMap(newStations[0].landmark);
+
+                scope.stations.map(function(station) {
+                    graphics.drawStation(station);
+                });
+            })
+            
 
             var intervalPromise = null;
 
-            scope.$watch('trips', function(newTrips) {
+            scope.$watch('trips', function(newTrips, oldTrips) {
+
+
 
                 if (newTrips == null)
                     return;

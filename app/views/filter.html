@@ -14,7 +14,12 @@
   </div>
 
   <div class='form-group' ng-if='dateList.length > 0'>
-    <button data-container="body" data-placement="left" settings-popover date='filter.date' date-list='dateList' ng-click='showPopover()' class='btn btn-sm btn-primary'>Change Date/Location</button>
+    <button data-container="body" data-placement="left" settings-popover filter='filter' date-list='dateList' ng-click='showPopover()' class='btn btn-sm btn-primary'>Change Date/Location</button>
+
+    <pre>
+  
+    {{filter}}
+    </pre>
   </div>
 
 </form>
@@ -22,12 +27,24 @@
 </div>
 
 <div class='settings-popover-content' ng-show='false'>
-<!--   <div>
-  <button class='btn btn-default btn-small'>San Francisco</button>
+  <div>
+  <button class='btn btn-primary btn-small city-button' data-cities='San Francisco'>San Francisco</button>
   </div>
   <div>
-  <button class='btn btn-default btn-small'>San Jose</button>
-  </div> -->
+  <button class='btn btn-primary btn-small city-button' data-cities='San Jose' >San Jose</button>
+  </div>
+  <div>
+  <button class='btn btn-primary btn-small city-button' data-cities='Palo Alto, Mountain View'>Palo Alto/Mountain View</button>
+
+  <button class='btn btn-primary btn-small city-button' data-cities='Redwood City'>Redwood City</button>
+
+
+  </div>
 
   <div class="trip-date" data-date="12-02-2012"></div>
 </div>
+
+<pre>
+  
+  {{filter}}
+</pre>
