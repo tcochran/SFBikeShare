@@ -191,7 +191,7 @@ angular.module('sf_bikes')
         tripsGroup.clear();
     };
 
-    this.drawTrip = function(trip, duration) {
+    this.drawTrip = function(trip, duration, animate) {
 
         // var projection = function(longlat) {
             
@@ -202,13 +202,22 @@ angular.module('sf_bikes')
         var location1 = projection([trip.startStation.long, trip.startStation.lat]);
         var location2 = projection([trip.endStation.long, trip.endStation.lat]);
 
-        var line = tripsGroup.line(location1[0], location1[1], location1[0], location1[1]);
+        if(animate) {
+            var line = tripsGroup.line(location1[0], location1[1], location1[0], location1[1]);
+        } else {
+            var line = tripsGroup.line(location1[0], location1[1], location2[0], location2[1]);
+        }
+
         line.attr({
             stroke: "#333333",
             strokeWidth: 3,
             opacity: 0.25,
             strokeOpacity: 0.25,
         });
+
+        if (!animate)
+            return; 
+        
         var circle = tripsGroup.circle(location1[0], location1[1], 4);
 
         circle.attr({

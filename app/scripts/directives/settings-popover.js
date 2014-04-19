@@ -28,12 +28,16 @@ angular.module('sf_bikes')
                 $(".city-button").click(function(event) {
                     scope.filter.cities = $(event.target).data('cities').split(',');
                     element.popover('hide');
+                    scope.$apply();
+                    
                 });
 
                 $('.trip-date').datepicker('show')
                 .on('changeDate', function(dateEvent) {
                     scope.filter.date = dateEvent.date.toString();
                     element.popover('hide');
+                    scope.$apply();
+                    
                 });
                 
             });

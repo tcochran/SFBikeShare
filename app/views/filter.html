@@ -1,25 +1,30 @@
 <div class='row'>
-<div class='col-sm-8'>
+<div class='col-sm-10'>
 
 
 <form class='filter-section' role="form" >
 
   <div class="form-group">
-    <div class='speed-slider'>
-      <span>Slow</span>
-      <span class='fast-slider'>Fast</span>
-    </div>
-    <input type="range" name="speed" min="1" max="12" ng-model='filter.speed'></input>
     
+    <div class='speed-toggle'>
+      <div class='speed-slider-label'>
+        <span>Slow</span>
+        <span class='fast-slider'>Fast</span>
+      </div>
+      <input type="range" name="speed" min="1" max="12" ng-model='filter.speed'></input>
+    </div>
+
+    <div class='animate-toggle'>
+      <input type='checkbox' class='animate-checkbox' ng-model='filter.animate' value='true'>
+      </input>
+      Animate
+    </div>
+
   </div>
 
   <div class='form-group' ng-if='dateList.length > 0'>
     <button data-container="body" data-placement="left" settings-popover filter='filter' date-list='dateList' ng-click='showPopover()' class='btn btn-sm btn-primary'>Change Date/Location</button>
 
-    <pre>
-  
-    {{filter}}
-    </pre>
   </div>
 
 </form>
@@ -44,7 +49,4 @@
   <div class="trip-date" data-date="12-02-2012"></div>
 </div>
 
-<pre>
-  
-  {{filter}}
-</pre>
+<pre>{{filter | json}}</pre>

@@ -214,28 +214,31 @@ angular.module('sf_bikes')
 
             var intervalPromise = null;
 
-            scope.$watch('trips', function(newTrips, oldTrips) {
-
-
-
-                if (newTrips == null)
-                    return;
-                
+            var restartGraphic = function() {
                 if (intervalPromise != null) {
                     $interval.cancel(intervalPromise);
                 }
 
                 graphics.clearTrips();
 
-                allTrips = angular.copy(newTrips);
+                allTrips = angular.copy(scope.trips);
                     
                 scope.stats.minutes = 0;
                 scope.stats.numBikes = 0; 
                 totalMinutes = 0;
 
-                startBikes(scope.filter.speed); 
+                scope.$evalAsync(function() {
+                    startBikes(scope.filter.speed, scope.filter.animate); 
+                });
+            }
+
+            scope.$watch('trips', function(newTrips, oldTrips) {
+
+                if (newTrips == null)
+                    return;
                 
-            })
+                restartGraphic();
+            });
 
             var renderBikes = function(tickTime, totalMinutes, tickMinutes) {
                 var trips = allTrips.filter(function(trip){
@@ -244,7 +247,7 @@ angular.module('sf_bikes')
 
                 trips.forEach(function(trip) {
                     var duration = tickTime * (trip.duration / tickMinutes);
-                    graphics.drawTrip(trip, duration);
+                    graphics.drawTrip(trip, duration, true);
                     var index = allTrips.indexOf(trip);
                     allTrips.splice(trip, 1);
                 });
@@ -252,12 +255,25 @@ angular.module('sf_bikes')
                 return trips.length;
             };
             
-            var startBikes = function (speed) {
+            var startBikes = function (speed, animate) {
+                console.log(animate)
+
 
                 var tickMinutes = Number(speed);
 
                 if (intervalPromise != null) {
                     $interval.cancel(intervalPromise);
+                }
+
+                if (!animate)
+                {
+                    console.log('drawTrips')
+                    scope.trips.forEach(function(trip) {
+                        graphics.drawTrip(trip, 0, false);
+                    }); 
+                    scope.stats.minutes = 1440;
+                    scope.stats.numBikes = scope.trips.length;
+                    return;
                 }
 
                 intervalPromise = $interval(function() {
@@ -284,7 +300,14 @@ angular.module('sf_bikes')
                 if (scope.trips == null)
                     return;
 
-                startBikes(speed);
+                startBikes(speed, scope.filter.animate);
+            });
+
+            scope.$watch('filter.animate', function(speed, oldspeed){
+                if (scope.trips == null)
+                    return;
+
+                restartGraphic();
             });
         }
     }

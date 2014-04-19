@@ -5,7 +5,7 @@ angular.module('sf_bikes')
 
     console.log(L.CRS);
 
-    $scope.filter = {speed: '12', date: '1/21/2014', cities: ['Redwood City']};
+    $scope.filter = {speed: '12', date: '1/21/2014', cities: ['Redwood City'], animate: false};
     $scope.data = {};
     $scope.title = "San Francisco";
 
@@ -20,11 +20,12 @@ angular.module('sf_bikes')
         Trips.all($scope.filter.date, $scope.filter.cities).then(function(trips) {
             $scope.data.trips = trips;
         }); 
-
-
     });
 
     $scope.$watch('filter.date', function(date) {
+        
+        console.log('date changed')
+
         Trips.all($scope.filter.date, $scope.filter.cities).then(function(trips) {
             $scope.data.trips = trips;
         }); 
