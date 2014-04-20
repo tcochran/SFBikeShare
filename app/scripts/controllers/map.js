@@ -1,13 +1,12 @@
 'use strict';
 angular.module('sf_bikes')
 
-.controller('MapCtrl', function($scope, Stations, Trips){
+.controller('MapCtrl', function($scope, Stations, Trips, Weather){
 
-    console.log(L.CRS);
 
-    $scope.filter = {speed: '12', date: '1/21/2014', cities: ['Redwood City'], animate: false};
+    $scope.filter = {speed: '2', date: '1/21/2014', cities: ['San Francisco'], animate: true};
     $scope.data = {};
-    $scope.title = "San Francisco";
+    $scope.title = "San Jose";
 
     $scope.$watch('filter.cities', function(cities) {
 
@@ -23,12 +22,14 @@ angular.module('sf_bikes')
     });
 
     $scope.$watch('filter.date', function(date) {
-        
-        console.log('date changed')
 
         Trips.all($scope.filter.date, $scope.filter.cities).then(function(trips) {
             $scope.data.trips = trips;
         }); 
+        Weather.find(Date.parse(date)).then(function(weather) {
+            $scope.weather = weather;
+        });
+        
 
         $scope.stats = {testDate: Date.parse($scope.filter.date)};    
     });

@@ -2,7 +2,7 @@ angular.module('sf_bikes')
 
 .service('graphics', function() {
 
-    var width = 1040, height = 900;
+    var width = 800, height = 750;
 
     var clearBaseMap = function() {
         if ($('#map svg')) {
@@ -36,8 +36,8 @@ angular.module('sf_bikes')
 
     var san_jose = {
         projection: d3.geo.mercator()
-            .center([-121.888979, 37.330698])
-            .scale(900000)
+            .center([-121.895979, 37.340698])
+            .scale(1130000)
             .translate([width / 2, height / 2])
         ,
         drawBaseMap: function() {
@@ -47,8 +47,8 @@ angular.module('sf_bikes')
 
     var redwood_city = {
         projection: d3.geo.mercator()
-            .center([-122.231061, 37.483501])
-            .scale(1500000)
+            .center([-122.231061, 37.485701])
+            .scale(2000000)
             .translate([width / 2, height / 2])
         ,
         drawBaseMap: function() {
@@ -58,7 +58,7 @@ angular.module('sf_bikes')
 
     var palo_alto_mountain_view = {
         projection: d3.geo.mercator()
-            .center([-122.090778, 37.403684])
+            .center([-122.130778, 37.412684])
             .scale(350000)
             .translate([width / 2, height / 2])
         ,
@@ -210,14 +210,14 @@ angular.module('sf_bikes')
 
         line.attr({
             stroke: "#333333",
-            strokeWidth: 3,
+            strokeWidth: 2,
             opacity: 0.25,
             strokeOpacity: 0.25,
         });
 
         if (!animate)
             return; 
-        
+
         var circle = tripsGroup.circle(location1[0], location1[1], 4);
 
         circle.attr({

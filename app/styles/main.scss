@@ -96,8 +96,8 @@ body {
 
 #states {
     fill: none;
-    stroke: #AAA;
-    stroke-width: 1px;
+    stroke: #333;
+    stroke-width: 1.5px;
     stroke-linejoin: round;
     stroke-linecap: round;
     margin-left: 100px;
@@ -107,11 +107,16 @@ body {
     fill: orange;
 }
 
-#stations-svg { position: absolute; top: 0; background-color: none; width: 1000px; height: 800px;}
+#stations-svg {width: 100%; height: 750px; position: absolute; top: -70px;}
 #trips-svg { position: absolute; top: 0; background-color: none; width: 1000px; height: 800px;}
 .speed-slider-label { position: relative; }
 .speed-slider-label .fast-slider { position: absolute; right: 0px; display: inline-block;}
 input[type=range] { display: inline-block; }
+
+.svg-container {
+    height: 600px;
+    position: relative;
+}
 
 .axis path {
   fill: none;
@@ -164,8 +169,99 @@ input[type=range] { display: inline-block; }
     display: inline-block;
     overflow: hidden;
     padding-left: 10px;
+    font-family: Futura;
 }
+
+.btn-primary {
+    font-family: Futura;
+    background-color: #FFFFFF;
+    border-radius: 0px;
+    color: #000000;
+    border: 1px solid #000000;
+
+}
+
+.btn-primary:hover {
+    background-color: #000;
+    color: white;
+}
+
 .speed-toggle {
     width: 60%;
     display: inline-block;
+    font-family: Futura;
 }
+
+.weather ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.weather li {
+    padding-bottom: 6px;
+}
+
+.time.stat-value {
+    font-size: 22px;
+}
+
+.date.stat-value {
+    font-size: 22px;
+}
+
+.bike-trips.stat-value {
+    font-size: 22px;
+}
+
+.stat-label{
+    font-family: Futura;
+    font-size: 13px;
+    display: block;
+    font-style: italic;
+}
+
+#ride-distribution {
+    background-color:#f7f7f7;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+h1, h2, h3{
+    font-family: Futura;
+    text-transform: uppercase;
+}
+
+h1 {
+    text-transform: uppercase;
+    margin-bottom: 26px;
+}
+
+.weather {
+    margin-top: 26px;
+    margin-bottom: 26px;
+}
+
+.stat-value    {
+    font-family: Futura;
+    font-size: 19px;
+    display: block;
+}
+
+.sidebar {
+    
+}
+
+.trip-date {
+    font-family: futura;
+}
+
+body { 
+    font-family: Futura, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+
+
+
