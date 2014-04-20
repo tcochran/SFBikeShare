@@ -15,8 +15,6 @@ angular.module('sf_bikes')
                 html: true,
                 content: $(".settings-popover-content").html()
             }).on('shown.bs.popover', function () {
-                console.log(scope);
-                    
                 $(".trip-date").datepicker({
                     beforeShowDay: function(date) {
                         return scope.dateList.indexOf(date.getTime()) > -1 

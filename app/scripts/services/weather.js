@@ -4,7 +4,6 @@ angular.module('sf_bikes')
 
     var weatherPromise = $http.get('data/weather.json').then(function(response){
 
-        console.log(response.data);
         var weather = {};
 
         response.data.forEach(function(dailyWeather) {
@@ -14,7 +13,6 @@ angular.module('sf_bikes')
             } else if (dailyWeather['Cloud_Cover'] > 0 && dailyWeather['Cloud_Cover'] < 8) {
                 dailyWeather.cloudCoverDesc = dailyWeather['Cloud_Cover'] + " / 8";
             } else {
-                console.log(dailyWeather['Cloud_Cover'])
                 dailyWeather.cloudCoverDesc = 'complete'
             }
 

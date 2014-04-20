@@ -152,6 +152,7 @@ angular.module('sf_bikes')
             fontSize: "16px",
             fontWeight: 'bold'
         });
+
         var textb = text.getBBox();
         var textDockCount = textGroup.text(textb.x, textb.y2 + textb.height, "Dock Count: " + station.dockcount);
 
@@ -162,8 +163,8 @@ angular.module('sf_bikes')
 
         stationName.attr({
             fill: "#DDD",
-            stroke: "#CCC",
-            opacity: 0.5,
+            stroke: "none",
+            opacity: 0.7,
             x: bb.x - paddingX,
             y: bb.y - paddingY,
             width: bb.width + (paddingX * 2),

@@ -1,10 +1,10 @@
 'use strict';
 angular.module('sf_bikes')
 
-.controller('MapCtrl', function($scope, Stations, Trips, Weather){
+.controller('MapCtrl', function($scope, Stations, Trips, Weather, Settings){
 
+    $scope.filter = Settings.load();
 
-    $scope.filter = {speed: '2', date: '1/21/2014', cities: ['San Francisco'], animate: true};
     $scope.data = {};
     $scope.title = "San Jose";
 
@@ -33,6 +33,10 @@ angular.module('sf_bikes')
 
         $scope.stats = {testDate: Date.parse($scope.filter.date)};    
     });
+
+    $scope.$watch('filter', function(filter) {
+        Settings.save(filter);
+    }, true);
 
     
     // Trips.dailyTotal().then(function(totals) {
