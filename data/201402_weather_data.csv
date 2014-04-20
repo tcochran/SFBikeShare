@@ -1,4 +1,4 @@
-Date,Max_Temperature_F,Mean_Temperature_F,Min_TemperatureF,Max_Dew_Point_F,MeanDew_Point_F,Min_Dewpoint_F,Max_Humidity,Mean_Humidity ,Min_Humidity ,Max_Sea_Level_Pressure_In ,Mean_Sea_Level_Pressure_In ,Min_Sea_Level_Pressure_In ,Max_Visibility_Miles ,Mean_Visibility_Miles ,Min_Visibility_Miles ,Max_Wind_Speed_MPH ,Mean_Wind_Speed_MPH ,Max_Gust_Speed_MPH,Precipitation_In ,Cloud_Cover ,Events,Wind_Dir_Degrees,zip
+Date,Max_Temperature_F,Mean_Temperature_F,Min_TemperatureF,Max_Dew_Point_F,MeanDew_Point_F,Min_Dewpoint_F,Max_Humidity,Mean_Humidity,Min_Humidity,Max_Sea_Level_Pressure_In,Mean_Sea_Level_Pressure_In,Min_Sea_Level_Pressure_In,Max_Visibility_Miles,Mean_Visibility_Miles,Min_Visibility_Miles ,Max_Wind_Speed_MPH,Mean_Wind_Speed_MPH,Max_Gust_Speed_MPH,Precipitation_In,Cloud_Cover,Events,Wind_Dir_Degrees,zip
 8/29/2013,74,68,61,61,58,56,93,75,57,30.07,30.02,29.97,10,10,10,23,11,28,0,4,,286,94107
 8/30/2013,78,69,60,61,58,56,90,70,50,30.05,30,29.93,10,10,7,29,13,35,0,2,,291,94107
 8/31/2013,71,64,57,57,56,54,93,75,57,30,29.96,29.92,10,10,10,26,15,31,0,4,,284,94107
