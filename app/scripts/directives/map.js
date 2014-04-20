@@ -256,7 +256,6 @@ angular.module('sf_bikes')
             };
             
             var startBikes = function (speed, animate) {
-                console.log(animate)
 
 
                 var tickMinutes = Number(speed);
@@ -267,7 +266,6 @@ angular.module('sf_bikes')
 
                 if (!animate)
                 {
-                    console.log('drawTrips')
                     scope.trips.forEach(function(trip) {
                         graphics.drawTrip(trip, 0, false);
                     }); 
@@ -277,6 +275,8 @@ angular.module('sf_bikes')
                 }
 
                 intervalPromise = $interval(function() {
+
+                    var thisTicktime = angular.copy(tickTime), thisMinutes = scope.stats.minutes, thistickMinutes = tickMinutes;
                     var bikesThisTick = renderBikes(tickTime, scope.stats.minutes, tickMinutes);
                     totalMinutes += tickMinutes;
 
@@ -291,7 +291,7 @@ angular.module('sf_bikes')
                 }, tickTime);
             };
 
-            var tickTime = 70;
+            var tickTime = 100;
             scope.stats.minutes = 0;
             scope.stats.numBikes = 0; 
             var totalMinutes = 0;
