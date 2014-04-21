@@ -1,6 +1,6 @@
 angular.module('sf_bikes')
 
-.directive('map', function($interval, graphics) {
+.directive('map', function($interval, graphics, canvasGraphics) {
     return {
         scope: {
             stations: '=',
@@ -18,6 +18,8 @@ angular.module('sf_bikes')
                     return;
 
                 graphics.drawMap(newStations[0].landmark);
+                console.log(canvasGraphics);
+                canvasGraphics.drawMap(newStations[0].landmark);
 
                 scope.stations.map(function(station) {
                     graphics.drawStation(station);
@@ -25,16 +27,16 @@ angular.module('sf_bikes')
             })
             
 
-            var intervalPromise = null;
+            var graphicsPromise = null;
 
             var restartGraphic = function() {
-                if (intervalPromise != null) {
-                    $interval.cancel(intervalPromise);
+                if (graphicsPromise != null) {
+                    graphicsPromise.cancel();
                 }
 
-                graphics.clearTrips();
+                // graphics.clearTrips();
 
-                allTrips = angular.copy(scope.trips);
+                // allTrips = angular.copy(scope.trips);
                     
                 scope.stats.minutes = 0;
                 scope.stats.numBikes = 0; 
@@ -60,7 +62,10 @@ angular.module('sf_bikes')
 
                 trips.forEach(function(trip) {
                     var duration = tickTime * (trip.duration / tickMinutes);
-                    graphics.drawTrip(trip, duration, true);
+                    // graphics.drawTrip(trip, duration, true);
+                    // console.log('drawTrip')
+                    // canvasGraphics.drawTrip(trip, duration, true);
+
                     var index = allTrips.indexOf(trip);
                     allTrips.splice(trip, 1);
                 });
@@ -73,47 +78,29 @@ angular.module('sf_bikes')
 
                 var tickMinutes = Number(speed);
 
-                if (intervalPromise != null) {
-                    $interval.cancel(intervalPromise);
+                if (graphicsPromise != null) {
+                    graphicsPromise.cancel();
                 }
 
-                if (!animate)
-                {
-                    scope.trips.forEach(function(trip) {
-                        graphics.drawTrip(trip, 0, false);
-                    }); 
-                    scope.stats.minutes = 1440;
-                    scope.stats.numBikes = scope.trips.length;
-                    return;
-                }
+                graphicsPromise = canvasGraphics.drawTrips(scope.trips, speed, animate, scope.stations[0].landmark);
+                graphicsPromise.timeUpdate(function(time) {
 
-                intervalPromise = $interval(function() {
+                    scope.stats.minutes = parseInt(time)
+                    scope.$apply();
+                });
 
-                    var thisTicktime = angular.copy(tickTime), thisMinutes = scope.stats.minutes, thistickMinutes = tickMinutes;
-                    var bikesThisTick = renderBikes(tickTime, scope.stats.minutes, tickMinutes);
-                    totalMinutes += tickMinutes;
-
-                    scope.stats.minutes = totalMinutes > 1440 ? 1440 : totalMinutes;
-
-                    scope.stats.numBikes = (scope.stats.numBikes += bikesThisTick);
-
-                    if (scope.stats.minutes > 1440) {
-                        $interval.cancel(intervalPromise);
-                    }
-
-                }, tickTime);
+                graphicsPromise.tripCountUpdate(function(tripCount) {
+                    scope.stats.numBikes = tripCount;
+                    scope.$apply();
+                })
             };
-
-            var tickTime = 100;
-            scope.stats.minutes = 0;
-            scope.stats.numBikes = 0; 
             var totalMinutes = 0;
 
             scope.$watch('filter.speed', function(speed, oldspeed){
                 if (scope.trips == null)
                     return;
 
-                startBikes(speed, scope.filter.animate);
+                graphicsPromise.changeSpeed(speed);
             });
 
             scope.$watch('filter.animate', function(speed, oldspeed){

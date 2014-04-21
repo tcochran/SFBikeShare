@@ -1,14 +1,8 @@
 angular.module('sf_bikes')
 
-.service('graphics', function() {
+.service ('canvasGraphics', function() {
 
     var width = 800, height = 750;
-
-    var clearBaseMap = function() {
-        if ($('#map svg')) {
-            $("#map svg").remove();
-        }
-    }
 
     var san_francisco = {
 
@@ -16,33 +10,13 @@ angular.module('sf_bikes')
             .center([-122.4067, 37.7879])
             .scale(850000)
             .translate([width / 2, height / 2])
-        ,
-        drawBaseMap: function() {
-
-            var svg = d3.select("#map").append("svg")
-                .attr("width", width)
-                .attr("height", height);
-
-            d3.json("data/bayarea.geojson", function(error, uk) {
-                svg.append("path")
-                    .attr("id", "states")
-                    .datum(uk)
-                    .attr("d", d3.geo.path().projection(san_francisco.projection));
-            });
-        }
     };
-
-
 
     var san_jose = {
         projection: d3.geo.mercator()
             .center([-121.895979, 37.340698])
             .scale(1130000)
             .translate([width / 2, height / 2])
-        ,
-        drawBaseMap: function() {
-            
-        }
     };
 
     var redwood_city = {
@@ -50,10 +24,6 @@ angular.module('sf_bikes')
             .center([-122.231061, 37.485701])
             .scale(2000000)
             .translate([width / 2, height / 2])
-        ,
-        drawBaseMap: function() {
-
-        }
     };
 
     var palo_alto_mountain_view = {
@@ -61,21 +31,185 @@ angular.module('sf_bikes')
             .center([-122.130778, 37.412684])
             .scale(350000)
             .translate([width / 2, height / 2])
-        ,
-        drawBaseMap: function() {
+    };
+    var cities = {
+        "San Jose": san_jose, 
+        "San Francisco": san_francisco, 
+        "Redwood City": redwood_city, 
+        "Mountain View": palo_alto_mountain_view, 
+        "Palo Alto": palo_alto_mountain_view
+    };
+
+    var city;
+    var canvas;
+    var context;
+    var self = this;
+
+    this.drawMap = function() {
+
+        canvas = $('#map-canvas')[0];
+        context = canvas.getContext('2d');
+        context.lineCap = "round"
+        var devicePixelRatio = window.devicePixelRatio || 1;
+        var backingStoreRatio = context.webkitBackingStorePixelRatio ||
+                                context.mozBackingStorePixelRatio ||
+                                context.msBackingStorePixelRatio ||
+                                context.oBackingStorePixelRatio ||
+                                context.backingStorePixelRatio || 1;
+
+        var ratio = devicePixelRatio / backingStoreRatio;
+
+        canvas.width = width * ratio;
+        canvas.height = height * ratio;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        context.scale(ratio, ratio);
+        context.translate(0.5, 0.5);
+    }
+
+    this.drawTrips = function(tripsJson, speed, animate, cityName) {
+        var elapsedRealTime = 0;
+        var cancel = false;
+        var startTime;
+        var tripCount = 0;
+        var timeUpdateCallback = function(){}
+        var tripCountCallback = function() {}
+
+        city = cities[cityName];
+        var drawLine = function(start, end) {
+            context.beginPath();
+            context.lineWidth = 2;
+            context.strokeStyle = 'rgba(21,21,21, 0.05)';
+            context.moveTo(start[0], start[1]);
+            context.lineTo(end[0], end[1]);
+
+            context.stroke();
+        };
+
+        var drawTrip = function(elapsedRealTime, trip) {
+
+            var percentOfJourneyComplete = (elapsedRealTime - trip.startTime) / trip.totalTime;
+
+            if (animate && percentOfJourneyComplete > 0 && percentOfJourneyComplete <= 1) {
+                if (trip.started == false) {
+                    trip.started = true;
+                    tripCount++;
+                    tripCountCallback(tripCount);
+                }
+                var x = (trip.distanceX * percentOfJourneyComplete) + trip.start[0];
+                var y = (trip.distanceY * percentOfJourneyComplete) + trip.start[1];
+                drawLine(trip.start, [x,y])
+
+                context.beginPath();
+                context.arc(x, y, 4, 0, 2 * Math.PI, false);
+                context.fillStyle = '#82C7BC';
+                context.fill();
+
+            } else if (!animate || percentOfJourneyComplete > 1) {
+                drawLine(trip.start, trip.end);
+            }
+        };
+
+        var draw = function() {
+            var time = (new Date()).getTime() - lastTime;
+            lastTime = (new Date()).getTime();
+            if (animate)
+                elapsedRealTime += time * aminTimeToMinute;
+            else {
+                elapsedRealTime = 1440;
+                tripCountCallback(trips.length);
+            }
+
+            timeUpdateCallback(elapsedRealTime);
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
             
-
-            var svg = d3.select("#map").append("svg")
-                .attr("width", width)
-                .attr("height", height);
-
-            d3.json("data/bayarea.geojson", function(error, uk) {
-                svg.append("path")
-                    .attr("id", "states")
-                    .datum(uk)
-                    .attr("d", d3.geo.path().projection(palo_alto_mountain_view.projection));
+            trips.forEach(function(trip) {
+                drawTrip(elapsedRealTime, trip);
             });
+
+            if (elapsedRealTime >= 1440) {
+                timeUpdateCallback(1440);
+                return;
+            };
+
+            if (!cancel)
+                window.requestAnimationFrame(draw);
+            else
+                context.clearRect(0, 0, canvas.width, canvas.height);
+        };
+
+        var aminTimeToMinute = 0.01 * speed;
+
+        var trips = tripsJson.map(function(trip) {
+            var tripAmin = {}
+            tripAmin.start = city.projection([trip.startStation.long, trip.startStation.lat]);
+            tripAmin.end = city.projection([trip.endStation.long, trip.endStation.lat]);
+            tripAmin.startTime = trip.minutes;
+            tripAmin.endTime = trip.minutes + trip.duration;
+            
+            tripAmin.distanceX = tripAmin.end[0] - tripAmin.start[0];
+            tripAmin.distanceY = tripAmin.end[1] - tripAmin.start[1];
+            tripAmin.totalTime = tripAmin.endTime - tripAmin.startTime;
+            tripAmin.totalDistance = Math.sqrt(Math.abs((tripAmin.distanceX * tripAmin.distanceX)) + Math.abs((tripAmin.distanceY * tripAmin.distanceY)))
+            tripAmin.started = false;
+            return tripAmin;
+        })        
+
+        setTimeout(function() {
+            lastTime = (new Date()).getTime();
+            draw();
+        }, 200);
+        
+        return {
+            cancel: function() {
+                cancel = true;
+            },
+            timeUpdate: function(callback) {
+                timeUpdateCallback = callback;
+            },
+            tripCountUpdate: function(callback) {
+                tripCountCallback = callback;
+            },
+            changeSpeed: function(speed) {
+                aminTimeToMinute = 0.01 * speed;
+            }
         }
+    };
+
+})
+
+.service('graphics', function() {
+
+    var width = 800, height = 750;
+
+    var san_francisco = {
+
+        projection: d3.geo.mercator()
+            .center([-122.4067, 37.7879])
+            .scale(850000)
+            .translate([width / 2, height / 2])
+    };
+
+    var san_jose = {
+        projection: d3.geo.mercator()
+            .center([-121.895979, 37.340698])
+            .scale(1130000)
+            .translate([width / 2, height / 2])
+    };
+
+    var redwood_city = {
+        projection: d3.geo.mercator()
+            .center([-122.231061, 37.485701])
+            .scale(2000000)
+            .translate([width / 2, height / 2])
+    };
+
+    var palo_alto_mountain_view = {
+        projection: d3.geo.mercator()
+            .center([-122.130778, 37.412684])
+            .scale(350000)
+            .translate([width / 2, height / 2])
     };
 
 
@@ -92,9 +226,6 @@ angular.module('sf_bikes')
     var s;
     var labelsGroup;
     var stationsGroup;
-    var tripsGroup;
-
-
 
     this.drawMap = function (city_name) {
 
@@ -104,23 +235,17 @@ angular.module('sf_bikes')
         if (!s){
             s = Snap("#stations-svg");
             
-            tripsGroup = s.g();
             stationsGroup = s.g();
             labelsGroup = s.g();
         }
 
-        tripsGroup.clear();
         stationsGroup.clear();
         labelsGroup.clear();
-
-        clearBaseMap();
-
-        city.drawBaseMap();
     };
 
-    this.drawStation = function (station) {
 
-        var location = projection([station.long, station.lat]);
+    this.drawStation = function (station) {
+        var location = projection([station.long, station.lat]); 
         var circle = stationsGroup.circle(location[0], location[1], 8);
 
         circle.attr({
@@ -186,50 +311,5 @@ angular.module('sf_bikes')
             label.attr({ display: 'none' });
         }
         circle.hover(hoverIn, hoverOut);
-    };
-
-    this.clearTrips = function() {
-        tripsGroup.clear();
-    };
-
-    this.drawTrip = function(trip, duration, animate) {
-
-        // var projection = function(longlat) {
-            
-        //     var point = map.latLngToLayerPoint(L.latLng(longlat[1], longlat[0]))
-        //     return [point.x, point.y];
-        // }
-
-        var location1 = projection([trip.startStation.long, trip.startStation.lat]);
-        var location2 = projection([trip.endStation.long, trip.endStation.lat]);
-
-        if(animate) {
-            var line = tripsGroup.line(location1[0], location1[1], location1[0], location1[1]);
-        } else {
-            var line = tripsGroup.line(location1[0], location1[1], location2[0], location2[1]);
-        }
-
-        line.attr({
-            stroke: "#333333",
-            strokeWidth: 2,
-            opacity: 0.25,
-            strokeOpacity: 0.25,
-        });
-
-        if (!animate)
-            return; 
-
-        var circle = tripsGroup.circle(location1[0], location1[1], 4);
-
-        circle.attr({
-            fill: "#82C7BC",
-            stroke: "#000",
-            strokeWidth: 0,
-        });
-            
-        circle.animate({cx: location2[0], cy: location2[1]}, duration, null, function(){
-            circle.remove();
-        });
-        line.animate({x2: location2[0], y2: location2[1]}, duration);
     };
 })
