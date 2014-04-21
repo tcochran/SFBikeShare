@@ -11,14 +11,11 @@ angular.module('sf_bikes')
         restrict: 'A',
         link: function(scope, element, attrs, ctrl){
 
-            var allTrips = null;
-
             scope.$watch('stations', function(newStations){
                 if (newStations == null)
                     return;
 
                 graphics.drawMap(newStations[0].landmark);
-                console.log(canvasGraphics);
                 canvasGraphics.drawMap(newStations[0].landmark);
 
                 scope.stations.map(function(station) {
@@ -33,10 +30,6 @@ angular.module('sf_bikes')
                 if (graphicsPromise != null) {
                     graphicsPromise.cancel();
                 }
-
-                // graphics.clearTrips();
-
-                // allTrips = angular.copy(scope.trips);
                     
                 scope.stats.minutes = 0;
                 scope.stats.numBikes = 0; 
@@ -54,29 +47,8 @@ angular.module('sf_bikes')
                 
                 restartGraphic();
             });
-
-            var renderBikes = function(tickTime, totalMinutes, tickMinutes) {
-                var trips = allTrips.filter(function(trip){
-                    return trip.minutes <= totalMinutes;
-                });
-
-                trips.forEach(function(trip) {
-                    var duration = tickTime * (trip.duration / tickMinutes);
-                    // graphics.drawTrip(trip, duration, true);
-                    // console.log('drawTrip')
-                    // canvasGraphics.drawTrip(trip, duration, true);
-
-                    var index = allTrips.indexOf(trip);
-                    allTrips.splice(trip, 1);
-                });
-
-                return trips.length;
-            };
             
             var startBikes = function (speed, animate) {
-
-
-                var tickMinutes = Number(speed);
 
                 if (graphicsPromise != null) {
                     graphicsPromise.cancel();
@@ -94,7 +66,6 @@ angular.module('sf_bikes')
                     scope.$apply();
                 })
             };
-            var totalMinutes = 0;
 
             scope.$watch('filter.speed', function(speed, oldspeed){
                 if (scope.trips == null)

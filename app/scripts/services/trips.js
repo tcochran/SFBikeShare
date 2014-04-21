@@ -22,28 +22,51 @@ angular.module('sf_bikes')
             trip.endStation = findStation(trip['End Terminal']);
 
             var dateString = trip['Start Date'].split(' ')[0];
-
             trip.date = Number(Date.parse(dateString));
+            trip.startDateTime = Date.parse(trip['Start Date']);
+            // trip.date = Number(Date.parse(trip['Start Date']));
+            // trip.endDateTime = Number(Date.parse(trip['Start Date']));
 
 
             return trip;
         });
     });
 
+    var startTimeOffsetMilliseconds = 6 * 60 * 60 * 1000;
+    var dayMilliseconds = 24 * 60 * 60 * 1000;
+
     this.all = function(filterDateString, cities) {
 
         var filterDate = Date.parse(filterDateString);
 
+        var startTime = filterDate + startTimeOffsetMilliseconds;
+        var endTime = startTime + dayMilliseconds;
+
         return translatedPromise.then(function(trips) {
             return trips.filter(function(trip){
-                var dateString = trip['Start Date'].split(' ')[0];
                 return cities.indexOf(trip.startStation.landmark) != -1
                     && cities.indexOf(trip.endStation.landmark) != -1 
-                    && trip.date === filterDate;
+                    && trip.startDateTime >= startTime && trip.startDateTime <= endTime;
             }).map(function(trip) {
                 var ms = Date.parse(trip['Start Date']);
                 trip.duration = trip.Duration / 60;
-                trip.minutes = (((ms - filterDate) /1000) / 60);
+                trip.minutes = (((ms - startTime) /1000) / 60);
+                return trip;
+            });
+        });
+
+
+
+
+        return translatedPromise.then(function(trips) {
+            return trips.filter(function(trip){
+                return cities.indexOf(trip.startStation.landmark) != -1
+                    && cities.indexOf(trip.endStation.landmark) != -1 
+                    && trip.startDateTime >= startTime && trip.startDateTime <= endTime;
+            }).map(function(trip) {
+                var ms = Date.parse(trip['Start Date']);
+                trip.duration = trip.Duration / 60;
+                trip.minutes = (((ms - startTime) /1000) / 60);
                 return trip;
             });
         });
