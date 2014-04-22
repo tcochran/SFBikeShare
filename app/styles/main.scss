@@ -170,11 +170,9 @@ input[type=range] { display: inline-block; }
     display: inline-block;
     overflow: hidden;
     padding-left: 10px;
-    font-family: Futura;
 }
 
 .btn-primary {
-    font-family: Futura;
     background-color: #FFFFFF;
     border-radius: 0px;
     color: #000000;
@@ -190,7 +188,6 @@ input[type=range] { display: inline-block; }
 .speed-toggle {
     width: 60%;
     display: inline-block;
-    font-family: Futura;
 }
 
 .weather ul {
@@ -215,7 +212,6 @@ input[type=range] { display: inline-block; }
 }
 
 .stat-label{
-    font-family: Futura;
     font-size: 13px;
     display: block;
     font-style: italic;
@@ -230,7 +226,6 @@ input[type=range] { display: inline-block; }
 }
 
 h1, h2, h3{
-    font-family: Futura;
     text-transform: uppercase;
 }
 
@@ -245,7 +240,6 @@ h1 {
 }
 
 .stat-value    {
-    font-family: Futura;
     font-size: 19px;
     display: block;
 }
@@ -257,16 +251,9 @@ h1 {
     padding: 15px;
 }
 
-.sidebar {
-    
-}
-
-.trip-date {
-    font-family: futura;
-}
 
 body { 
-    font-family: Futura, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Twentieth Century", "Century Gothic", Arial, sans-serif;
 }
 
 

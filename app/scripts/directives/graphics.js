@@ -79,7 +79,7 @@ angular.module('sf_bikes')
         var drawLine = function(start, end) {
             context.beginPath();
             context.lineWidth = 2;
-            context.strokeStyle = 'rgba(21,21,21, 0.05)';
+            context.strokeStyle = 'rgba(51,51,51, 0.1)';
             context.moveTo(start[0], start[1]);
             context.lineTo(end[0], end[1]);
 
