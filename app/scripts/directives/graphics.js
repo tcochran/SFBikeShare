@@ -75,26 +75,27 @@ angular.module('sf_bikes')
     }
 
     var colors = [
-        "#00CC02",
+        "#00CC02",//
         "#13CE00",
         "#2BD100",
         "#43D300",
         "#5CD600",
-        "#75D800",
+        "#75D800",//
         "#8EDB00",
         "#A9DD00",
         "#C3E001",
         "#DEE201",
-        "#E5CF01",
+        "#E5CF01",//
         "#E7B801",
         "#EAA001",
         "#EC8801",
         "#EF6F02",
-        "#F15602",
+        "#F15602",//
         "#F43C02",
         "#F62202",
         "#F90702",
         "#FC0219"];
+        // #00000
 
     this.drawStations = function(stations, rebalances, elapsedRealTime) {
         stations.forEach(function(station) {

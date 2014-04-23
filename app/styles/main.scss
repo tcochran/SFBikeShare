@@ -256,6 +256,27 @@ body {
     font-family: Futura, "Twentieth Century", "Century Gothic", Arial, sans-serif;
 }
 
+#key-svg {
+    right: 10px;
+    position:absolute;
+    bottom: 10px;
+    
+}
+
+.filter-section  {
+    font-size: 11px;
+}
+#key-svg text{
+
+    font-size: 11px;
+}
+
+
+
+#map { height: 800px; width: 100%; position: absolute; top: 0px; left: 0px;}
+
+#map-mask { height: 800px; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgba(255,255,255,0.6)}
+
 
 
 

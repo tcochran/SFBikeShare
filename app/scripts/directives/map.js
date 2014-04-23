@@ -11,6 +11,16 @@ angular.module('sf_bikes')
         restrict: 'A',
         link: function(scope, element, attrs, ctrl){
 
+
+            // var init = function() {
+            //     var map = L.map('map').setView([51.505, -0.09], 13);
+
+            //     // add an OpenStreetMap tile layer
+            //     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            //         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            //     }).addTo(map);
+            // }();
+
             scope.$watch('stations', function(newStations){
                 if (newStations == null)
                     return;
