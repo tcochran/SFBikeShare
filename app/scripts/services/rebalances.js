@@ -15,7 +15,7 @@ angular.module('sf_bikes')
         }
         var dateString = padLeft("00", (date.getMonth() + 1).toString()) + "_" + padLeft("00", date.getDate().toString()) + "_" + date.getFullYear().toString().slice(-2);
 
-        return $http.get('/data/rebalancing/' +  dateString + ".json").then(function(response){
+        return $http.get('data/rebalancing/' +  dateString + ".json").then(function(response){
             return response.data
         });
     }
