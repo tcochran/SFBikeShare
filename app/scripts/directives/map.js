@@ -37,9 +37,10 @@ angular.module('sf_bikes')
                 });
             }
 
-            scope.$watch('data', function(newTrips, oldTrips) {
+            scope.$watch('data', function(data, oldTrips) {
 
-                if (newTrips == null)
+
+                if (!data.trips || !data.rebalances)
                     return;
                 restartGraphic();
             });
@@ -64,14 +65,14 @@ angular.module('sf_bikes')
             };
 
             scope.$watch('filter.speed', function(speed, oldspeed){
-                if (scope.trips == null)
+                if (scope.data.trips == null)
                     return;
 
                 graphicsPromise.changeSpeed(speed);
             });
 
             scope.$watch('filter.animate', function(speed, oldspeed){
-                if (scope.trips == null)
+                if (scope.data.trips == null)
                     return;
 
                 restartGraphic();
