@@ -17,8 +17,7 @@ angular.module('sf_bikes')
         });
 
         $q.all([Rebalances.find($scope.filter.cities, new Date($scope.filter.date)), Trips.all($scope.filter.date, $scope.filter.cities)]).then(function(data){
-            $scope.data.rebalances = [data[0]];
-            $scope.data.trips = data[1]
+            $scope.data = {rebalances: data[0], trips: data[1]};
 
         }); 
     });
@@ -26,8 +25,7 @@ angular.module('sf_bikes')
     $scope.$watch('filter.date', function(date) {
 
         $q.all([Rebalances.find($scope.filter.cities, new Date(date)), Trips.all($scope.filter.date, $scope.filter.cities)]).then(function(data){
-            $scope.data.rebalances = data[0];
-            $scope.data.trips = data[1]
+            $scope.data = {rebalances: data[0], trips: data[1]};
         });
 
         Weather.find(Date.parse(date)).then(function(weather) {
