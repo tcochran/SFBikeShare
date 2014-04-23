@@ -36,13 +36,11 @@ angular.module('sf_bikes')
 
     
         var startTime = Date.parse(date) + startTimeOffsetMilliseconds;
-        console.log(Date.parse(date),startTime);
 
         return $q.all([findForDate(date), Stations.all()]).then(function(data) {
             var rebalances = data[0];
             var stations = data[1];
             var stationsLookup = {};
-            console.log(stations);
             stations.forEach(function(station) {
                 stationsLookup[station.station_id] = station;
             });
@@ -58,7 +56,6 @@ angular.module('sf_bikes')
                 return cities.indexOf(rebalance.station.landmark) != -1;
             })
 
-            console.log(cityRebalances);
 
             var byStationLookup = {};
 
@@ -72,7 +69,6 @@ angular.module('sf_bikes')
                 rebalance.minutes = Math.floor((rebalance.timestamp - startTime) / 1000 / 60);
                 byStationLookup[rebalance.station_id].push(rebalance)
             })
-            console.log(byStationLookup);
             return byStationLookup;
 
         }).then(function(byStationLookup) {

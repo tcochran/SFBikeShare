@@ -13,11 +13,12 @@ angular.module('sf_bikes')
 
 
             // var init = function() {
-            //     var map = L.map('map').setView([51.505, -0.09], 13);
+            //     var map = L.map('map').setView([37.7879, -122.4067], 15);
 
             //     // add an OpenStreetMap tile layer
             //     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            //         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            //         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            //         detectRetina: true
             //     }).addTo(map);
             // }();
 
@@ -27,6 +28,7 @@ angular.module('sf_bikes')
 
                 graphics.drawMap(newStations[0].landmark);
                 canvasGraphics.drawMap(newStations[0].landmark);
+                newStations.forEach(function(station){ graphics.drawStation(station); })
 
             })
             

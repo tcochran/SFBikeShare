@@ -245,7 +245,7 @@ angular.module('sf_bikes')
 
 .service('graphics', function() {
 
-    var width = 800, height = 750;
+    var width = 850, height = 750;
 
     var san_francisco = {
 
@@ -313,10 +313,11 @@ angular.module('sf_bikes')
         var circle = stationsGroup.circle(location[0], location[1], 8);
 
         circle.attr({
-            fill: "#bada55",
+            fill: "#none",
             stroke: "#000",
             strokeWidth: 0,
-            zIndex: '9999'
+            zIndex: '9999',
+            opacity: 0
         });
 
         var marginTop = 44;
@@ -365,13 +366,13 @@ angular.module('sf_bikes')
         })
 
         var hoverIn = function() {
-            circle.attr({ fill: 'steelblue' })
+            circle.attr({ fill: '#333', opacity: 0.4 })
             label.attr({ display: 'inherit' });
 
         };
 
         var hoverOut = function() {
-            circle.attr({ fill: "#bada55" })
+            circle.attr({ opacity: 0 })
             label.attr({ display: 'none' });
         }
         circle.hover(hoverIn, hoverOut);
