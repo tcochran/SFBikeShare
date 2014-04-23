@@ -4,6 +4,7 @@ angular.module('sf_bikes')
     return {
         scope: {
             stations: '=',
+            rebalances: '=',
             trips: '=',
             stats: '=', 
             filter: '='
@@ -18,9 +19,9 @@ angular.module('sf_bikes')
                 graphics.drawMap(newStations[0].landmark);
                 canvasGraphics.drawMap(newStations[0].landmark);
 
-                scope.stations.map(function(station) {
-                    graphics.drawStation(station);
-                });
+                // scope.stations.map(function(station) {
+                //     graphics.drawStation(station);
+                // });
             })
             
 
@@ -44,7 +45,6 @@ angular.module('sf_bikes')
 
                 if (newTrips == null)
                     return;
-                
                 restartGraphic();
             });
             
@@ -54,7 +54,7 @@ angular.module('sf_bikes')
                     graphicsPromise.cancel();
                 }
 
-                graphicsPromise = canvasGraphics.drawTrips(scope.trips, speed, animate, scope.stations[0].landmark);
+                graphicsPromise = canvasGraphics.drawTrips(scope.trips, scope.stations, scope.rebalances, speed, animate, scope.stations[0].landmark);
                 graphicsPromise.timeUpdate(function(time) {
 
                     scope.stats.minutes = parseInt(time)

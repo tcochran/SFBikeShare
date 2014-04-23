@@ -10,7 +10,6 @@ with open('app/data/201402_rebalancing_data.csv', 'rb') as csvfile:
     pp = pprint.PrettyPrinter(indent=2, depth=3)
 
     days = {}
-    # items = itertools.islice(spamreader, 500000)
     for item in spamreader:
         date = time.strptime(item['time'], "%Y/%m/%d %H:%M:%S")
         datestring = time.strftime('%x', date)

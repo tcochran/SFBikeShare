@@ -2,7 +2,7 @@ angular.module('sf_bikes')
 
 .service ('canvasGraphics', function() {
 
-    var width = 800, height = 750;
+    var width = 850, height = 750;
 
     var san_francisco = {
 
@@ -67,7 +67,57 @@ angular.module('sf_bikes')
         context.translate(0.5, 0.5);
     }
 
-    this.drawTrips = function(tripsJson, speed, animate, cityName) {
+
+    var getColor = function (bikeCount, dockCount) {
+        var percentFull = 1 - (bikeCount / dockCount);
+        var step = Math.floor(20 * percentFull);
+        return colors[step];
+    }
+
+    var colors = [
+        "#00CC02",
+        "#13CE00",
+        "#2BD100",
+        "#43D300",
+        "#5CD600",
+        "#75D800",
+        "#8EDB00",
+        "#A9DD00",
+        "#C3E001",
+        "#DEE201",
+        "#E5CF01",
+        "#E7B801",
+        "#EAA001",
+        "#EC8801",
+        "#EF6F02",
+        "#F15602",
+        "#F43C02",
+        "#F62202",
+        "#F90702",
+        "#FC0219"];
+
+    this.drawStations = function(stations, rebalances, elapsedRealTime) {
+        stations.forEach(function(station) {
+            var rebalance = rebalances.findClosest(station.station_id, elapsedRealTime);
+            // return;
+            context.beginPath();
+            context.arc(station.location[0], station.location[1], 8, 0, 2 * Math.PI, false);
+            if (rebalance == null) {
+                context.fillStyle = "00CC02"; 
+                context.fill();
+            } else {
+                context.fillStyle = getColor(rebalance.bikes_available, station.dockcount);
+                context.fill();
+
+                context.fillStyle = "#000000"; 
+                // context.font = "bold 12px sans-serif";
+                // context.fillText(station.station_id + "-" + rebalance.bikes_available, station.location[0], station.location[1]);
+
+            }
+        })
+    }
+
+    this.drawTrips = function(tripsJson, stationsJson, rebalancingJson, speed, animate, cityName) {
         var elapsedRealTime = 0;
         var cancel = false;
         var startTime;
@@ -82,7 +132,6 @@ angular.module('sf_bikes')
             context.strokeStyle = 'rgba(51,51,51, 0.1)';
             context.moveTo(start[0], start[1]);
             context.lineTo(end[0], end[1]);
-
             context.stroke();
         };
 
@@ -124,9 +173,13 @@ angular.module('sf_bikes')
 
             context.clearRect(0, 0, canvas.width, canvas.height);
             
+            
+
             trips.forEach(function(trip) {
                 drawTrip(elapsedRealTime, trip);
             });
+
+            self.drawStations(stations, rebalancingJson, elapsedRealTime);
 
             if (elapsedRealTime >= 1440) {
                 timeUpdateCallback(1440);
@@ -147,6 +200,8 @@ angular.module('sf_bikes')
             tripAmin.end = city.projection([trip.endStation.long, trip.endStation.lat]);
             tripAmin.startTime = trip.minutes;
             tripAmin.endTime = trip.minutes + trip.duration;
+            tripAmin.start_station_id = trip.startStation.station_id
+            tripAmin.end_station_id = trip.endStation.station_id
             
             tripAmin.distanceX = tripAmin.end[0] - tripAmin.start[0];
             tripAmin.distanceY = tripAmin.end[1] - tripAmin.start[1];
@@ -154,8 +209,16 @@ angular.module('sf_bikes')
             tripAmin.totalDistance = Math.sqrt(Math.abs((tripAmin.distanceX * tripAmin.distanceX)) + Math.abs((tripAmin.distanceY * tripAmin.distanceY)))
             tripAmin.started = false;
             return tripAmin;
-        })        
+        })
+        var stations = stationsJson.map(function(station) {
+            var stationAmin = {};
+            stationAmin.location = city.projection([station.long, station.lat]);
+            stationAmin.station_id = station.station_id;
+            stationAmin.dockcount = station.dockcount;
+            return stationAmin;
+        });
 
+        // trips = [trips.filter(function(trip) { return trip.start_station_id == 60 || trip.end_station_id == 60; })[0]]
         setTimeout(function() {
             lastTime = (new Date()).getTime();
             draw();

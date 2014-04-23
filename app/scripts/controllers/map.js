@@ -1,7 +1,7 @@
 'use strict';
 angular.module('sf_bikes')
 
-.controller('MapCtrl', function($scope, Stations, Trips, Weather, Settings){
+.controller('MapCtrl', function($scope, Stations, Trips, Weather, Settings, Rebalances, $q){
 
     $scope.filter = Settings.load();
 
@@ -16,16 +16,20 @@ angular.module('sf_bikes')
             $scope.stations = stations;
         });
 
-        Trips.all($scope.filter.date, $scope.filter.cities).then(function(trips) {
-            $scope.data.trips = trips;
+        $q.all([Rebalances.find($scope.filter.cities, new Date($scope.filter.date)), Trips.all($scope.filter.date, $scope.filter.cities)]).then(function(data){
+            $scope.data.rebalances = [data[0]];
+            $scope.data.trips = data[1]
+
         }); 
     });
 
     $scope.$watch('filter.date', function(date) {
 
-        Trips.all($scope.filter.date, $scope.filter.cities).then(function(trips) {
-            $scope.data.trips = trips;
-        }); 
+        $q.all([Rebalances.find($scope.filter.cities, new Date(date)), Trips.all($scope.filter.date, $scope.filter.cities)]).then(function(data){
+            $scope.data.rebalances = data[0];
+            $scope.data.trips = data[1]
+        });
+
         Weather.find(Date.parse(date)).then(function(weather) {
             $scope.weather = weather;
         });
@@ -45,9 +49,5 @@ angular.module('sf_bikes')
 
     Trips.dateList().then(function(dateList) {
         $scope.dateList = dateList;
-    });
-
-
-
-    
+    });    
 });
