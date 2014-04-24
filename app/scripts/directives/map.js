@@ -13,7 +13,7 @@ angular.module('sf_bikes')
 
 
             
-            leafletMap = L.map('map').setView([37.7879, -122.4067], 14);
+            leafletMap = L.map('map', {maxZoom: 15, minZoom: 13, scrollWheelZoom: false}).setView([37.7879, -122.4067], 14);
 
             // add an OpenStreetMap tile layer
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {

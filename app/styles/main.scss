@@ -182,7 +182,7 @@ input[type=range] { display: inline-block; }
 
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .btn-primary:focus {
     background-color: #000;
     color: white;
 }

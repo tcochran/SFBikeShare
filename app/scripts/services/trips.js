@@ -14,12 +14,9 @@ angular.module('sf_bikes')
             stationsLookup[station.station_id] = station;
         });
 
-        var findStation = function(id){
-            return stationsLookup[id];
-        };
         return trips.map(function(trip){
-            trip.startStation = findStation(trip['Start Terminal']);
-            trip.endStation = findStation(trip['End Terminal']);
+            trip.startStation = stationsLookup[trip['Start Terminal']];
+            trip.endStation = stationsLookup[trip['End Terminal']];
 
             var dateString = trip['Start Date'].split(' ')[0];
             trip.date = Number(Date.parse(dateString));
@@ -44,8 +41,8 @@ angular.module('sf_bikes')
 
         return translatedPromise.then(function(trips) {
             return trips.filter(function(trip){
-                return cities.indexOf(trip.startStation.landmark) != -1
-                    && cities.indexOf(trip.endStation.landmark) != -1 
+                return (cities.indexOf(trip.startStation.landmark) != -1
+                    || cities.indexOf(trip.endStation.landmark) != -1) 
                     && trip.startDateTime >= startTime && trip.startDateTime <= endTime;
             }).map(function(trip) {
                 var ms = Date.parse(trip['Start Date']);

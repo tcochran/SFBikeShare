@@ -17,11 +17,14 @@ angular.module('sf_bikes')
             }).on('shown.bs.popover', function () {
 
                 $(".city-button").each(function(index, element) {
-                    if (scope.filter.cities == $(element).data('cities').split(','))
+                    console.log(scope.filter.cities, $(element).data('cities').split(','));
+                    if (scope.filter.cities.toString() == $(element).data('cities').split(',').toString())
                     {
                         $(element).addClass("active");
+                        console.log('add')
                     } else {
                         $(element).removeClass("active");
+                        console.log('remove')
                     }
                 })
                 $(".trip-date").datepicker({

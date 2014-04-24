@@ -117,8 +117,8 @@ angular.module('sf_bikes')
 
         city = cities[cityName];
         var drawLine = function(start, end) {
+            
             context.beginPath();
-            context.lineWidth = 2;
             context.strokeStyle = 'rgba(51,51,51, 0.1)';
             context.moveTo(start[0], start[1]);
             context.lineTo(end[0], end[1]);
@@ -164,10 +164,15 @@ angular.module('sf_bikes')
             context.clearRect(0, 0, canvas.width, canvas.height);
             
             
+            
+            context.lineWidth = 2;
+            
 
             trips.forEach(function(trip) {
                 drawTrip(elapsedRealTime, trip);
             });
+
+
 
             self.drawStations(stations, rebalancingJson, elapsedRealTime);
 
