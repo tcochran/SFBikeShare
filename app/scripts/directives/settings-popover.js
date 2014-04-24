@@ -15,6 +15,15 @@ angular.module('sf_bikes')
                 html: true,
                 content: $(".settings-popover-content").html()
             }).on('shown.bs.popover', function () {
+
+                $(".city-button").each(function(index, element) {
+                    if (scope.filter.cities == $(element).data('cities').split(','))
+                    {
+                        $(element).addClass("active");
+                    } else {
+                        $(element).removeClass("active");
+                    }
+                })
                 $(".trip-date").datepicker({
                     beforeShowDay: function(date) {
                         return scope.dateList.indexOf(date.getTime()) > -1 
