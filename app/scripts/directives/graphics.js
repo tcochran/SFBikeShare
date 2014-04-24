@@ -6,7 +6,7 @@ angular.module('sf_bikes')
 
     var san_francisco = { latlong: [37.785096782276035, -122.39732202148438], zoom: 14};
     var san_jose = {latlong: [37.33966009140741, -121.89022064208984], zoom: 14};
-    var redwood_city = {latlong: [37.485858168354895, -122.2263765335083], zoom: 14};
+    var redwood_city = {latlong: [37.485858168354895, -122.2263765335083], zoom: 15};
     var palo_alto_mountain_view = {latlong: [37.41093704693206, -122.09587097167967], zoom: 13};
 
     var cities = {
