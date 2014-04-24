@@ -30,7 +30,6 @@ angular.module('sf_bikes')
 
         canvas.width = document.documentElement.clientWidth; //document.width is obsolete
         canvas.height = $(document).height(); //document.height is obsolete
-        console.log(canvas.height, $(window).height(), window.innerHeight, $(document).height());
         width = canvas.width;
         height = canvas.height;
 

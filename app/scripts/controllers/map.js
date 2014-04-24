@@ -25,7 +25,6 @@ angular.module('sf_bikes')
     });
 
     $scope.$watch('filter.date', function(date, olddate) {
-        console.log(date, olddate)
         if (date == olddate)
             return;
 
@@ -54,7 +53,6 @@ angular.module('sf_bikes')
         Weather.find(Date.parse($scope.filter.date)).then(function(weather) {
             $scope.weather = weather;
         });
-        console.log($scope.cities)
         Stations.find($scope.filter.cities).then(function(stations) {
             $scope.stations = stations;
         });
@@ -65,9 +63,6 @@ angular.module('sf_bikes')
     };
     loadEverything();
     
-    // Trips.dailyTotal().then(function(totals) {
-    //     $scope.daily_totals = totals;
-    // });
 
     Trips.dateList().then(function(dateList) {
         $scope.dateList = dateList;

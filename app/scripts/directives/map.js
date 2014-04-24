@@ -35,7 +35,6 @@ angular.module('sf_bikes')
             })
 
             leafletMap.on('zoomend', function() {
-                console.log('zoomend');
                 if (graphicsPromise != null)
                     graphicsPromise.refresh();
                 graphics.drawStations(leafletMap, scope.stations);

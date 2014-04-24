@@ -25,9 +25,7 @@ angular.module('sf_bikes')
         var nextDay = new Date(date.getTime());
         nextDay.setDate(date.getDate()+1);
 
-        console.log(date, nextDay);
         return $q.all([findForDate(date), findForDate(nextDay)]).then(function(data) {
-            console.log(data[0].length, data[1].length);
             return data[0].concat(data[1]);
         });
     }
@@ -45,7 +43,6 @@ angular.module('sf_bikes')
     var startTimeOffsetMilliseconds = 6 * 60 * 60 * 1000;
 
     this.find = function(cities, date) {
-        console.log("find rebalances")
     
         var startTime = Date.parse(date) + startTimeOffsetMilliseconds;
 
