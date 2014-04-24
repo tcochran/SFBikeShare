@@ -12,22 +12,22 @@ angular.module('sf_bikes')
         link: function(scope, element, attrs, ctrl){
 
 
-            // var init = function() {
-            //     var map = L.map('map').setView([37.7879, -122.4067], 15);
+            
+            var leafletMap = L.map('map').setView([37.7879, -122.4067], 14);
 
-            //     // add an OpenStreetMap tile layer
-            //     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            //         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            //         detectRetina: true
-            //     }).addTo(map);
-            // }();
+            // add an OpenStreetMap tile layer
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                detectRetina: true
+            }).addTo(leafletMap);
+            
 
             scope.$watch('stations', function(newStations){
                 if (newStations == null)
                     return;
 
-                graphics.drawMap(newStations[0].landmark);
-                canvasGraphics.drawMap(newStations[0].landmark);
+                graphics.drawMap(leafletMap, newStations[0].landmark);
+                canvasGraphics.drawMap(leafletMap, newStations[0].landmark);
                 newStations.forEach(function(station){ graphics.drawStation(station); })
 
             })
