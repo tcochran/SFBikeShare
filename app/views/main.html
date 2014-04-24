@@ -2,30 +2,17 @@
 <div id='map'></div>
 <div id='map-mask'></div>
 
-<div class='row' style='position: relative  '>
+<div class='row' style='position: relative'>
     <div class="col-sm-8" ng-if='stations' map filter='filter' stations='stations' stats='stats' data='data'>
 
 
         <div id='ride-distribution'>
             <div class='row'>
                 <div class='col-md-6'>
-                    <h3>Ride Distribution</h3>
+                    <h3></h3>
                 </div>
 
-                <div class='stats text-right' ng-show='stats.minutes'>
-                    <div class='row'>
-                        <div class='col-sm-12' >
-                            <span class='stat-value time'>{{(stats.testDate + (stats.minutes * 60 * 1000) + (6 * 60 * 60 * 1000)) | date:'shortTime' }}</span>
-                        </div>
-                    </div>
-
-                    <div class='row'>
-                        <div class='col-sm-12' >
-                            <span class='stat-value bike-trips'>{{stats.numBikes}} Bike Trips</span>
-                        </div>
-                    </div>
-                    
-                </div>
+                
             </div>
 
             <div class='row'>
@@ -47,69 +34,8 @@
 
                 </div>
             </div>
-
-
-                        <svg height="150" width="110" id='key-svg' xmlns="http://www.w3.org/2000/svg"
-     xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <circle cx="10" cy="12" r="7" fill="#00CC02"></circle>>
-                            <rect x="3" y="14" width="14" height="7" fill="#13CE00" ></rect>
-                            <rect x="3" y="21" width="14" height="7" fill="#2BD100" ></rect>
-                            <rect x="3" y="28" width="14" height="7" fill="#43D300" ></rect>
-                            <rect x="3" y="35" width="14" height="7" fill="#5CD600" ></rect>
-                            <rect x="3" y="42" width="14" height="7" fill="#75D800" ></rect>
-                            <rect x="3" y="49" width="14" height="7" fill="#8EDB00" ></rect>
-                            <rect x="3" y="56" width="14" height="7" fill="#A9DD00" ></rect>
-                            <rect x="3" y="63" width="14" height="7" fill="#C3E001" ></rect>
-                            <rect x="3" y="70" width="14" height="7" fill="#DEE201" ></rect>
-                            <rect x="3" y="77" width="14" height="7" fill="#E5CF01" ></rect>
-                            <rect x="3" y="84" width="14" height="7" fill="#E7B801" ></rect>
-                            <rect x="3" y="91" width="14" height="7" fill="#EAA001" ></rect>
-                            <rect x="3" y="98" width="14" height="7" fill="#EF6F02" ></rect>
-                            <rect x="3" y="105" width="14" height="7" fill="#F15602" ></rect>
-                            <rect x="3" y="112" width="14" height="7" fill="#F43C02" ></rect>
-                            <rect x="3" y="119" width="14" height="7" fill="#F62202" ></rect>
-                            <rect x="3" y="126" width="14" height="7" fill="#F90702" ></rect>
-                            <circle cx="10" cy="140" r="7" fill="#00000" ></circle>
-                            <rect x="3" y="133" width="14" height="7" fill="#FC0219" ></rect>
-                            <text x="30" y="15" fill="black" >Docks Full</text>
-                            <text x="30" y="81" fill="black">Docks Half Full</text>
-                            <text x="30" y="143" fill="black">Docks Empty</text>                            
-                        </svg>
-
-
-
-            <div class='row'>
-                <div class='col-md-6'>
-                    <form class='filter-section' role="form" >
-
-                      <div class="form-group">
-                        
-                        <div class='speed-toggle'>
-                          <div class='speed-slider-label'>
-                            <span>Slow</span>
-                            <span class='fast-slider'>Fast</span>
-                          </div>
-                          <input type="range" name="speed" min="1" max="12" ng-disabled='!filter.animate' ng-model='filter.speed'></input>
-                        </div>
-
-                        <div class='animate-toggle'>
-                          <input type='checkbox' class='animate-checkbox'  ng-model='filter.animate' value='true'>
-                          </input>
-                          &nbsp;&nbsp;Animate
-                        </div>
-
-                      </div>
-                    </form>
-                </div>
-            </div>
-
-
         </div>
 
-
-        <!-- <div id='map'></div> -->
-        
-        <!-- <ng-include src="'images/san-jose.svg'" scope="" onload=""></ng-include> -->
     </div>
 
     <div class="col-sm-3 col-sm-offset-1 sidebar">
@@ -122,6 +48,23 @@
 
             
             
+
+            <div class='' ng-show='stats.minutes'>
+                <div class='row'>
+                    <div class='col-sm-12' >
+                        <span class='stat-value time'>{{(stats.testDate + (stats.minutes * 60 * 1000) + (6 * 60 * 60 * 1000)) | date:'shortTime' }}</span>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col-sm-12' >
+                        <span class='stat-value bike-trips'>{{stats.numBikes}} Bike Trips</span>
+                    </div>
+                </div>
+            </div>
+
+            <ng-include src="'views/filter.html'"></ng-include>
+
             <div class="weather">
 
                 <div class='row'>
@@ -146,7 +89,66 @@
                     </div>
                 </div>
             </div>
-            <ng-include src="'views/filter.html'"></ng-include>
+
+            <div class='key'>
+                <div class='row'>
+                    <div class='col-sm-12'>
+                        <svg height="150" width="110" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <circle cx="10" cy="12" r="7" fill="#00CC02"></circle>>
+                            <rect x="3" y="14" width="14" height="7" fill="#13CE00" ></rect>
+                            <rect x="3" y="21" width="14" height="7" fill="#2BD100" ></rect>
+                            <rect x="3" y="28" width="14" height="7" fill="#43D300" ></rect>
+                            <rect x="3" y="35" width="14" height="7" fill="#5CD600" ></rect>
+                            <rect x="3" y="42" width="14" height="7" fill="#75D800" ></rect>
+                            <rect x="3" y="49" width="14" height="7" fill="#8EDB00" ></rect>
+                            <rect x="3" y="56" width="14" height="7" fill="#A9DD00" ></rect>
+                            <rect x="3" y="63" width="14" height="7" fill="#C3E001" ></rect>
+                            <rect x="3" y="70" width="14" height="7" fill="#DEE201" ></rect>
+                            <rect x="3" y="77" width="14" height="7" fill="#E5CF01" ></rect>
+                            <rect x="3" y="84" width="14" height="7" fill="#E7B801" ></rect>
+                            <rect x="3" y="91" width="14" height="7" fill="#EAA001" ></rect>
+                            <rect x="3" y="98" width="14" height="7" fill="#EF6F02" ></rect>
+                            <rect x="3" y="105" width="14" height="7" fill="#F15602" ></rect>
+                            <rect x="3" y="112" width="14" height="7" fill="#F43C02" ></rect>
+                            <rect x="3" y="119" width="14" height="7" fill="#F62202" ></rect>
+                            <rect x="3" y="126" width="14" height="7" fill="#F90702" ></rect>
+                            <circle cx="10" cy="140" r="7" fill="#00000" ></circle>
+                            <rect x="3" y="133" width="14" height="7" fill="#FC0219" ></rect>
+                            <text x="30" y="15" fill="black" >Docks Full</text>
+                            <text x="30" y="81" fill="black">Docks Half Full</text>
+                            <text x="30" y="143" fill="black">Docks Empty</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class='row animation-filter'>
+                <div class='col-md-12'>
+                    <form class='filter-section' role="form" >
+
+                      <div class="form-group">
+                        
+                        <div class='speed-toggle'>
+                          <div class='speed-slider-label'>
+                            <span>Slow</span>
+                            <span class='fast-slider'>Fast</span>
+                          </div>
+                          <input type="range" name="speed" min="1" max="12" ng-disabled='!filter.animate' ng-model='filter.speed'></input>
+                        </div>
+
+                        <div class='animate-toggle'>
+                          <input type='checkbox' class='animate-checkbox'  ng-model='filter.animate' value='true'>
+                          </input>
+                          &nbsp;&nbsp;Animate
+                        </div>
+
+                      </div>
+                    </form>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>

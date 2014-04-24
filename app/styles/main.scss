@@ -234,7 +234,7 @@ h1 {
 }
 
 .weather {
-    margin-top: 26px;
+    margin-top: 10px;
     margin-bottom: 26px;
 }
 
@@ -250,27 +250,32 @@ h1 {
     padding: 15px;
 }
 
+.stat-value.date {
+    margin-bottom: 15px;
+}
+
+
+.filter-section {
+    margin-top: 15px;
+}
+
 
 body { 
     font-family: Futura, "Twentieth Century", "Century Gothic", Arial, sans-serif;
 }
 
-#key-svg {
-    right: 10px;
-    position:absolute;
-    bottom: 10px;
-    
+
+.key text {
+    font-size: 12px;
 }
 
-.filter-section  {
-    font-size: 11px;
-}
-#key-svg text {
-
-    font-size: 11px;
+.sidebar {
+    background-color: rgba(255,255,255,0.7);
 }
 
-
+.animation-filter {
+    font-size: 12px;
+} 
 
 #map { height: 800px; width: 100%; position: absolute; top: 0px; left: 0px;}
 

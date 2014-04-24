@@ -8,27 +8,8 @@ angular.module('sf_bikes')
 
     var san_jose = {latlong: [37.340698, -121.895979], zoom: 15};
     var redwood_city = {latlong: [37.485701, -122.231061], zoom: 14};
-    var palo_alto_mountain_view = {latlong: [37.412684, -122.130778], zoom: 14};
+    var palo_alto_mountain_view = {latlong: [37.412684, -122.130778], zoom: 13};
 
-    //     projection: d3.geo.mercator()
-    //         .center([-121.895979, 37.340698])
-    //         .scale(1130000)
-    //         .translate([width / 2, height / 2])
-    // };
-
-    // var redwood_city = {
-    //     projection: d3.geo.mercator()
-    //         .center([-122.231061, 37.485701])
-    //         .scale(2000000)
-    //         .translate([width / 2, height / 2])
-    // };
-
-    // var palo_alto_mountain_view = {
-    //     projection: d3.geo.mercator()
-    //         .center([-122.130778, 37.412684])
-    //         .scale(350000)
-    //         .translate([width / 2, height / 2])
-    // };
     var cities = {
         "San Jose": san_jose, 
         "San Francisco": san_francisco, 
@@ -84,27 +65,26 @@ angular.module('sf_bikes')
     }
 
     var colors = [
-        "#00CC02",//
+        "#00CC02",
         "#13CE00",
         "#2BD100",
         "#43D300",
         "#5CD600",
-        "#75D800",//
+        "#75D800",
         "#8EDB00",
         "#A9DD00",
         "#C3E001",
         "#DEE201",
-        "#E5CF01",//
+        "#E5CF01",
         "#E7B801",
         "#EAA001",
         "#EC8801",
         "#EF6F02",
-        "#F15602",//
+        "#F15602",
         "#F43C02",
         "#F62202",
         "#F90702",
         "#FC0219"];
-        // #00000
 
     this.drawStations = function(stations, rebalances, elapsedRealTime) {
         stations.forEach(function(station) {
