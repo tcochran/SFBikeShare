@@ -1,8 +1,10 @@
 
 <div id='map'></div>
 <div id='map-mask'></div>
+<canvas id="map-canvas"></canvas>
+<svg id='stations-svg'></svg>
 
-<div class='row' style='position: relative'>
+<div class='row map-container' style='position: relative' >
     <div class="col-sm-8" ng-if='stations' map filter='filter' stations='stations' stats='stats' data='data'>
 
 
@@ -29,8 +31,9 @@
 
             <div class='row'>
                 <div class='col-md-12 svg-container' >
-                    <canvas id="map-canvas" width="578" height="200"></canvas>
-                    <svg id='stations-svg'></svg>
+                    
+                    
+                    <div id='event-mask'></div> 
 
                 </div>
             </div>
@@ -134,7 +137,7 @@
                             <span>Slow</span>
                             <span class='fast-slider'>Fast</span>
                           </div>
-                          <input type="range" name="speed" min="1" max="12" ng-disabled='!filter.animate' ng-model='filter.speed'></input>
+                          <input type="range" name="speed" min="1" max="12" ng-model='filter.speed'></input>
                         </div>
 
                         <div class='animate-toggle'>

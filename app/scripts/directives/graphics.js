@@ -4,11 +4,10 @@ angular.module('sf_bikes')
 
     var width = 850, height = 750;
 
-    var san_francisco = { latlong: [37.7879, -122.4067], zoom: 14};
-
-    var san_jose = {latlong: [37.340698, -121.895979], zoom: 15};
-    var redwood_city = {latlong: [37.485701, -122.231061], zoom: 14};
-    var palo_alto_mountain_view = {latlong: [37.412684, -122.130778], zoom: 13};
+    var san_francisco = { latlong: [37.785096782276035, -122.39732202148438], zoom: 14};
+    var san_jose = {latlong: [37.33966009140741, -121.89022064208984], zoom: 14};
+    var redwood_city = {latlong: [37.485858168354895, -122.2263765335083], zoom: 14};
+    var palo_alto_mountain_view = {latlong: [37.41093704693206, -122.09587097167967], zoom: 13};
 
     var cities = {
         "San Jose": san_jose, 
@@ -29,8 +28,9 @@ angular.module('sf_bikes')
         canvas = $('#map-canvas')[0];
         context = canvas.getContext('2d');
 
-        canvas.width = document.body.clientWidth; //document.width is obsolete
-        canvas.height = document.body.clientHeight; //document.height is obsolete
+        canvas.width = document.documentElement.clientWidth; //document.width is obsolete
+        canvas.height = $(document).height(); //document.height is obsolete
+        console.log(canvas.height, $(window).height(), window.innerHeight, $(document).height());
         width = canvas.width;
         height = canvas.height;
 
@@ -51,7 +51,7 @@ angular.module('sf_bikes')
         context.scale(ratio, ratio);
         context.translate(0.5, 0.5);
         projection = function(longlat) {
-            var point = leafletMap.latLngToLayerPoint(L.latLng(longlat[1], longlat[0]));
+            var point = leafletMap.latLngToContainerPoint(L.latLng(longlat[1], longlat[0]));
             return [point.x, point.y];
         };
         leafletMap.setView(cities[city_name].latlong, cities[city_name].zoom)
@@ -104,6 +104,8 @@ angular.module('sf_bikes')
             }
         })
     }
+
+
 
     this.drawTrips = function(tripsJson, stationsJson, rebalancingJson, speed, animate, cityName) {
         var elapsedRealTime = 0;
@@ -184,29 +186,44 @@ angular.module('sf_bikes')
 
         var trips = tripsJson.map(function(trip) {
             var tripAmin = {}
-            tripAmin.start = projection([trip.startStation.long, trip.startStation.lat]);
-            tripAmin.end = projection([trip.endStation.long, trip.endStation.lat]);
+            tripAmin.startLonglat = [trip.startStation.long, trip.startStation.lat];
+            tripAmin.endLonglat = [trip.endStation.long, trip.endStation.lat];
             tripAmin.startTime = trip.minutes;
             tripAmin.endTime = trip.minutes + trip.duration;
             tripAmin.start_station_id = trip.startStation.station_id
             tripAmin.end_station_id = trip.endStation.station_id
             
-            tripAmin.distanceX = tripAmin.end[0] - tripAmin.start[0];
-            tripAmin.distanceY = tripAmin.end[1] - tripAmin.start[1];
-            tripAmin.totalTime = tripAmin.endTime - tripAmin.startTime;
-            tripAmin.totalDistance = Math.sqrt(Math.abs((tripAmin.distanceX * tripAmin.distanceX)) + Math.abs((tripAmin.distanceY * tripAmin.distanceY)))
             tripAmin.started = false;
             return tripAmin;
         })
+
         var stations = stationsJson.map(function(station) {
             var stationAmin = {};
-            stationAmin.location = projection([station.long, station.lat]);
+            stationAmin.longLat = [station.long, station.lat]
             stationAmin.station_id = station.station_id;
             stationAmin.dockcount = station.dockcount;
             return stationAmin;
         });
 
-        // trips = [trips.filter(function(trip) { return trip.start_station_id == 60 || trip.end_station_id == 60; })[0]]
+        var calculateProjections = function(trips, stations) {
+            trips.forEach(function(tripAmin) {
+
+                tripAmin.start = projection(tripAmin.startLonglat);
+                tripAmin.end = projection(tripAmin.endLonglat);
+
+                tripAmin.distanceX = tripAmin.end[0] - tripAmin.start[0];
+                tripAmin.distanceY = tripAmin.end[1] - tripAmin.start[1];
+                tripAmin.totalTime = tripAmin.endTime - tripAmin.startTime;
+                tripAmin.totalDistance = Math.sqrt(Math.abs((tripAmin.distanceX * tripAmin.distanceX)) + Math.abs((tripAmin.distanceY * tripAmin.distanceY)))
+            });
+
+            stations.forEach(function(stationAmin){
+                stationAmin.location = projection(stationAmin.longLat);
+            });
+        }
+
+        calculateProjections(trips, stations);
+
         setTimeout(function() {
             lastTime = (new Date()).getTime();
             draw();
@@ -224,6 +241,10 @@ angular.module('sf_bikes')
             },
             changeSpeed: function(speed) {
                 aminTimeToMinute = 0.01 * speed;
+            },
+            refresh: function() {
+                calculateProjections(trips, stations);
+                draw();
             }
         }
     };
@@ -232,57 +253,17 @@ angular.module('sf_bikes')
 
 .service('graphics', function() {
 
-    var width = 850, height = 750;
-
-    var san_francisco = {
-
-        projection: d3.geo.mercator()
-            .center([-122.4067, 37.7879])
-            .scale(850000)
-            .translate([width / 2, height / 2])
-    };
-
-    var san_jose = {
-        projection: d3.geo.mercator()
-            .center([-121.895979, 37.340698])
-            .scale(1130000)
-            .translate([width / 2, height / 2])
-    };
-
-    var redwood_city = {
-        projection: d3.geo.mercator()
-            .center([-122.231061, 37.485701])
-            .scale(2000000)
-            .translate([width / 2, height / 2])
-    };
-
-    var palo_alto_mountain_view = {
-        projection: d3.geo.mercator()
-            .center([-122.130778, 37.412684])
-            .scale(350000)
-            .translate([width / 2, height / 2])
-    };
-
-
-    var cities = {
-        "San Jose": san_jose, 
-        "San Francisco": san_francisco, 
-        "Redwood City": redwood_city, 
-        "Mountain View": palo_alto_mountain_view, 
-        "Palo Alto": palo_alto_mountain_view
-    };
-
-    var city;
     var projection;
     var s;
     var labelsGroup;
     var stationsGroup;
+    var stations = [];
+    var self = this;
 
-    this.drawMap = function (leafletMap, city_name) {
+    this.drawMap = function (leafletMap) {
 
-        city = cities[city_name];
         projection = function(longlat) {
-            var point = leafletMap.latLngToLayerPoint(L.latLng(longlat[1], longlat[0]));
+            var point = leafletMap.latLngToContainerPoint(L.latLng(longlat[1], longlat[0]));
             return [point.x, point.y];
         };
 
@@ -298,9 +279,19 @@ angular.module('sf_bikes')
     };
 
 
+
+    this.drawStations = function(leafletMap, stations) {
+        self.drawMap(leafletMap);
+
+        stations.forEach(function(station) {
+            self.drawStation(station);
+        })
+    }
+
+
     this.drawStation = function (station) {
         var location = projection([station.long, station.lat]); 
-        var circle = stationsGroup.circle(location[0], location[1], 8);
+        var circle = stationsGroup.circle(location[0] + 0.5, location[1] + 0.5, 8);
 
         circle.attr({
             fill: "#none",
@@ -362,7 +353,7 @@ angular.module('sf_bikes')
         };
 
         var hoverOut = function() {
-            circle.attr({ opacity: 0 })
+            circle.attr({ opacity: 0.001 })
             label.attr({ display: 'none' });
         }
         circle.hover(hoverIn, hoverOut);
