@@ -2,40 +2,47 @@ angular.module('sf_bikes')
 
 .service('Trips', function($http, Stations, $q){
 
-    var tripsPromise = $http.get('data/trips.json').then(function(response){
-        return response.data;
-    });
 
-    var translatedPromise = $q.all([tripsPromise, Stations.all()]).then(function(data) {
-        var trips = data[0];
-        var stations = data[1];
-        var stationsLookup = {};
-        stations.forEach(function(station) {
-            stationsLookup[station.station_id] = station;
+    var findForDate = function(date) {
+        var padLeft = function(pad, str) {
+            return pad.substring(0, pad.length - str.length) + str
+        }
+        var dateString = padLeft("00", (date.getMonth() + 1).toString()) + "_" + padLeft("00", date.getDate().toString()) + "_" + date.getFullYear().toString().slice(-2);
+
+        return $q.all([$http.get('data/trips/' + dateString + ".json"), Stations.all()]).then(function(data) {
+            var trips = data[0].data;
+            var stations = data[1];
+            var stationsLookup = {};
+            stations.forEach(function(station) {
+                stationsLookup[station.station_id] = station;
+            });
+
+            return trips.map(function(trip){
+                trip.startStation = stationsLookup[trip['Start Terminal']];
+                trip.endStation = stationsLookup[trip['End Terminal']];
+
+                var dateString = trip['Start Date'].split(' ')[0];
+                trip.date = Number(Date.parse(dateString));
+                trip.startDateTime = Date.parse(trip['Start Date']);
+
+                return trip;
+            });
         });
-
-        return trips.map(function(trip){
-            trip.startStation = stationsLookup[trip['Start Terminal']];
-            trip.endStation = stationsLookup[trip['End Terminal']];
-
-            var dateString = trip['Start Date'].split(' ')[0];
-            trip.date = Number(Date.parse(dateString));
-            trip.startDateTime = Date.parse(trip['Start Date']);
-            // trip.date = Number(Date.parse(trip['Start Date']));
-            // trip.endDateTime = Number(Date.parse(trip['Start Date']));
-
-
-            return trip;
-        });
-    });
+    }
 
     var startTimeOffsetMilliseconds = 6 * 60 * 60 * 1000;
     var dayMilliseconds = 24 * 60 * 60 * 1000;
 
     this.all = function(filterDateString, cities) {
+        var date = new Date(filterDateString); 
+        var nextDay = new Date(date.getTime());
+        nextDay.setDate(date.getDate()+1);
+
+        var translatedPromise = $q.all([findForDate(date), findForDate(nextDay)]).then(function(data){
+            return data[0].concat(data[1]);
+        });
 
         var filterDate = Date.parse(filterDateString);
-
         var startTime = filterDate + startTimeOffsetMilliseconds;
         var endTime = startTime + dayMilliseconds;
 
@@ -51,9 +58,6 @@ angular.module('sf_bikes')
                 return trip;
             });
         });
-
-
-
 
         return translatedPromise.then(function(trips) {
             return trips.filter(function(trip){
@@ -87,13 +91,9 @@ angular.module('sf_bikes')
     };
 
     this.dateList = function() {
-        return translatedPromise.then(function(trips) {
-            return trips.reduce(function(dates, trip) {
-                if (dates.indexOf(trip.date) == -1) {
-                    dates.push(trip.date)
-                }
-                return dates;
-            }, []);
+        return $http.get('data/all_dates.json').then(function(response) {
+            return response.data.map(function(date) { return Date.parse(date); });
         })
+        
     };
 });
