@@ -58,6 +58,9 @@ angular.module('sf_bikes')
 
 
     var getColor = function (bikeCount, dockCount) {
+
+        if (bikeCount == 0)
+            return "#444";
         var percentFull = 1 - (bikeCount / dockCount);
         var step = Math.floor(20 * percentFull);
         return colors[step];
@@ -89,17 +92,26 @@ angular.module('sf_bikes')
         stations.forEach(function(station) {
             var rebalance = rebalances.findClosest(station.station_id, elapsedRealTime);
             // return;
-            context.beginPath();
-            context.arc(station.location[0], station.location[1], 8, 0, 2 * Math.PI, false);
+            
             if (rebalance == null) {
-                context.fillStyle = "00CC02"; 
-                context.fill();
+                
             } else {
-                context.fillStyle = getColor(rebalance.bikes_available, station.dockcount);
+                context.beginPath();
+                context.arc(station.location[0], station.location[1], 9, 0, 2 * Math.PI, false);
+
+                var col = getColor(rebalance.bikes_available, station.dockcount);
+                context.fillStyle = col;
                 context.fill();
 
-                context.fillStyle = "#000000"; 
+                context.beginPath();
+                context.fillStyle = "rgba(100, 100, 100, 0.3)";
+                context.arc(station.location[0], station.location[1], 9, 0, 2 * Math.PI, false);
+                context.fill();
 
+                context.beginPath();
+                context.fillStyle = col;
+                context.arc(station.location[0], station.location[1], 5.5, 0, 2 * Math.PI, false);
+                context.fill();
             }
         })
     }
@@ -118,7 +130,7 @@ angular.module('sf_bikes')
         var drawLine = function(start, end) {
             
             context.beginPath();
-            context.strokeStyle = 'rgba(51,51,51, 0.1)';
+            context.strokeStyle = 'rgba(31,31,31, 0.1)';
             context.moveTo(start[0], start[1]);
             context.lineTo(end[0], end[1]);
             context.stroke();
@@ -177,6 +189,7 @@ angular.module('sf_bikes')
 
             if (elapsedRealTime >= 1440) {
                 timeUpdateCallback(1440);
+                cancel = true;
                 return;
             };
 
@@ -248,7 +261,8 @@ angular.module('sf_bikes')
             },
             refresh: function() {
                 calculateProjections(trips, stations);
-                draw();
+                if (cancel || !animate)
+                    draw();
             }
         }
     };
@@ -295,7 +309,7 @@ angular.module('sf_bikes')
 
     this.drawStation = function (station) {
         var location = projection([station.long, station.lat]); 
-        var circle = stationsGroup.circle(location[0] + 0.5, location[1] + 0.5, 8);
+        var circle = stationsGroup.circle(location[0] + 0.5, location[1] + 0.5, 9);
 
         circle.attr({
             fill: "#none",
@@ -304,6 +318,7 @@ angular.module('sf_bikes')
             zIndex: '9999',
             opacity: 0
         });
+
 
         var marginTop = 44;
 

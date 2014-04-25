@@ -61,6 +61,7 @@ angular.module('sf_bikes')
             $scope.data = {rebalances: data[0], trips: data[1]};
         });
     };
+    
     loadEverything();
     
 
