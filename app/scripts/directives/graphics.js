@@ -245,12 +245,11 @@ angular.module('sf_bikes')
             });
         }
 
-        calculateProjections(trips, stations);
-
         setTimeout(function() {
+            calculateProjections(trips, stations);
             lastTime = (new Date()).getTime();
             draw();
-        }, 200);
+        }, 1000);
         
         return {
             cancel: function() {
