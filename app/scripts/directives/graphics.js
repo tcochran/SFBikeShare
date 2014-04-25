@@ -269,6 +269,9 @@ angular.module('sf_bikes')
                 calculateProjections(trips, stations);
                 if (cancel || !animate)
                     draw();
+            },
+            resize: function() {
+                self.resize();
             }
         }
     };
