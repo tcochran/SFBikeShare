@@ -11,7 +11,7 @@ angular.module('sf_bikes')
         restrict: 'A',
         link: function(scope, element, attrs, ctrl){
 
-            leafletMap = L.map('map', {maxZoom: 15, minZoom: 13, detectRetina: true, scrollWheelZoom: false}).setView([37.7879, -122.4067], 14);
+            leafletMap = L.map('map', {maxZoom: 15, minZoom: 13, detectRetina: true, scrollWheelZoom: false});
 
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',

@@ -139,7 +139,6 @@ angular.module('sf_bikes')
 
         city = cities[cityName];
         var drawLine = function(start, end) {
-            
             context.beginPath();
             context.strokeStyle = 'rgba(31,31,31, 0.1)';
             context.moveTo(start[0], start[1]);
@@ -162,8 +161,8 @@ angular.module('sf_bikes')
                 drawLine(trip.start, [x,y])
 
                 context.beginPath();
-                context.arc(x, y, 4, 0, 2 * Math.PI, false);
-                context.fillStyle = '#82C7BC';
+                context.arc(x, y, 4.5, 0, 2 * Math.PI, false);
+                context.fillStyle = '#678c9f';
                 context.fill();
 
             } else if (!animate || percentOfJourneyComplete > 1) {

@@ -48,20 +48,16 @@
             <div ng-show='stats.testDate'> 
                 <span class='stat-value date'>{{stats.testDate | date:'fullDate' }}</span>
             </div>
-
-            
-            
-
-            <div class='' ng-show='stats.minutes'>
+            <div>
                 <div class='row'>
                     <div class='col-sm-12' >
-                        <span class='stat-value time'>{{(stats.testDate + (stats.minutes * 60 * 1000) + (6 * 60 * 60 * 1000)) | date:'shortTime' }}</span>
+                        <span class='stat-value time'><span ng-show='stats.minutes'>{{(stats.testDate + (stats.minutes * 60 * 1000) + (6 * 60 * 60 * 1000)) | date:'shortTime' }}</span>&nbsp;</span>
                     </div>
                 </div>
 
                 <div class='row'>
                     <div class='col-sm-12' >
-                        <span class='stat-value bike-trips'>{{stats.numBikes}} Bike Trips</span>
+                        <span class='stat-value bike-trips'><span ng-show='stats.minutes'>{{stats.numBikes}} Bike Trips</span>&nbsp;</span>
                     </div>
                 </div>
             </div>
@@ -150,28 +146,6 @@
                     </form>
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>
-
-
-
-
-<!-- <pre>{{filter | json}}</pre> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
