@@ -5,33 +5,33 @@ http://tcochran.github.io/SFBikeShare
 
 Visualization of bay area bike share program. A data exploratory tool to highlight where bikes are going throughout the day.
 
-* show locations of stations 
-* swap between cities and dates
-* displays bikes moving between stations over the course of day
-* level of the bike stations docks through the day, highlights hotspots without bikes using gradient scale, utilizies the replenishment data
-* weather information for that day
-* mouseover station for name and total docks
+* Shows locations of bike stations 
+* Toggle between bay area cities and dates with trip data
+* Displays bikes moving between stations over the course of day, trail is marked on map
+* Level of the bike station docks through the day, highlights hotspots without bikes using a gradient scale, utilizies the bike replenishment open data
+* Weather information for that day
+* Hover over station for name and total dock count
 
 ###Technology
-* python scripts to generate data
-* yeoman/grunt build
-* angular front end
-* bootstrap
-* canvas and svg animations
-* leaflet with open street maps basemap
+* Python scripts to generate data
+* Yeoman/grunt build
+* Angular front end
+* Bootstrap
+* Canvas and svg animations
+* Leaflet with open street maps basemap
 
 ###Current problems 
-* as a day is counted as 6am - 6am the most recent day can't be displayed
-* does not work in IE
-* some of the data is inconsistent, for example redwood city the replenishment changes without corresponding trips, appears to be problems with the raw data
+* As a day is counted as 6am - 6am the most recent day can't be displayed
+* Does not work in IE
+* Some of the data is inconsistent, for example redwood city the replenishment changes without corresponding trips, appears to be problems with the raw data
 
 ###Future 
-* mobile customized versions
-* include other cities bike share data 
-* show number of bikes available and dock available on the mouse over
-* report to show problems that happened during the day
-* slider to control time of the day
-* comparison of bike usage throught the week
+* Mobile customized versions
+* Include other cities bike share data 
+* Show number of bikes available and dock available on the mouse over
+* Report to show problems that happened during the day
+* Slider to control time of the day
+* Comparison of bike usage throught the week
 
 
 An entry into the Bay Area Bike Share Open Data Challenge. For questions email timothy.cochran@gmail.com
