@@ -92,7 +92,9 @@ angular.module('sf_bikes')
                 if (scope.data.trips == null)
                     return;
 
-                graphicsPromise.changeSpeed(speed);
+                if (graphicsPromise != null) {
+                    graphicsPromise.changeSpeed(speed);
+                }
             });
 
             scope.$watch('filter.animate', function(speed, oldspeed){

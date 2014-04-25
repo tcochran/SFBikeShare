@@ -11,7 +11,7 @@ angular.module('sf_bikes')
     this.load = function() {
         var settingsItem = localStorage.getItem("settings");
         if (!settingsItem || settingsItem == "undefined") {
-            return {speed: '2', date: '1/21/2014', cities: ['San Francisco'], animate: true};
+            return {speed: '2', date: '2/27/2014', cities: ['San Francisco'], animate: true};
         } else {
             return JSON.parse(settingsItem);
         }
