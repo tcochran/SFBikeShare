@@ -82,8 +82,7 @@ angular.module('sf_bikes')
             var stationIds = Object.keys(byStationLookup);
             stationIds.forEach(function(stationId){
 
-                var dayArray = new Array(1450);
-
+                var dayArray = new Array(1441);
 
                 var sortedRebalances = byStationLookup[stationId].sort(function(rebalance1, rebalance2) {
                     return rebalance1.timestamp - rebalance2.timestamp 
@@ -97,17 +96,19 @@ angular.module('sf_bikes')
             });
 
             var findClosest =  function(stationId, minutes) {
-                if (Math.floor(minutes) > 1440)
-                {
-                    console.log(Math.floor(minutes));
-                }
+                
                 if (!(stationId in byStationLookup)){
                     return null;
+                }
+
+                if (Math.floor(minutes) > 1440)
+                {
+                    return byStationLookup[stationId][1440];
                 }
                 return byStationLookup[stationId][Math.floor(minutes)];
             };
 
-            return { findClosest: findClosest  };
+            return { findClosest: findClosest, stationLookup: byStationLookup };
 
         });
     };

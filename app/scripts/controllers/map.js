@@ -20,6 +20,7 @@ angular.module('sf_bikes')
         $q.all([Rebalances.find($scope.filter.cities, new Date($scope.filter.date)), Trips.all($scope.filter.date, $scope.filter.cities)]).then(function(data){
 
             $scope.data = {rebalances: data[0], trips: data[1]};
+            
 
         }); 
     });
@@ -58,10 +59,13 @@ angular.module('sf_bikes')
         });
 
         $q.all([Rebalances.find($scope.filter.cities, new Date($scope.filter.date)), Trips.all($scope.filter.date, $scope.filter.cities)]).then(function(data){
+
             $scope.data = {rebalances: data[0], trips: data[1]};
         });
+
+
     };
-    
+
     loadEverything();
     
 

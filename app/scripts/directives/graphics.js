@@ -22,17 +22,14 @@ angular.module('sf_bikes')
     var canvas;
     var context;
     var self = this;
+    var ratio;
 
     this.drawMap = function(leafletMap, city_name) {
 
         canvas = $('#map-canvas')[0];
         context = canvas.getContext('2d');
-
-        canvas.width = document.documentElement.clientWidth; //document.width is obsolete
-        canvas.height = $(document).height(); //document.height is obsolete
-        width = canvas.width;
-        height = canvas.height;
-
+        
+    
         context.lineCap = "round"
         var devicePixelRatio = window.devicePixelRatio || 1;
         var backingStoreRatio = context.webkitBackingStorePixelRatio ||
@@ -41,12 +38,14 @@ angular.module('sf_bikes')
                                 context.oBackingStorePixelRatio ||
                                 context.backingStorePixelRatio || 1;
 
-        var ratio = devicePixelRatio / backingStoreRatio;
+        ratio = devicePixelRatio / backingStoreRatio;
+
+        self.resize();
 
         canvas.width = width * ratio;
         canvas.height = height * ratio;
-        canvas.style.width = width + 'px';
-        canvas.style.height = height + 'px';
+
+        
         context.scale(ratio, ratio);
         context.translate(0.5, 0.5);
         projection = function(longlat) {
@@ -56,6 +55,20 @@ angular.module('sf_bikes')
         leafletMap.setView(cities[city_name].latlong, cities[city_name].zoom)
     }
 
+    this.resize = function() {
+        canvas.width = document.documentElement.clientWidth; //document.width is obsolete
+        canvas.height = $(document).height(); //document.height is obsolete
+        width = canvas.width;
+        height = canvas.height;
+
+        canvas.width = width * ratio;
+        canvas.height = height * ratio;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+
+        context.scale(ratio, ratio);
+        context.translate(0.5, 0.5);
+    }
 
     var getColor = function (bikeCount, dockCount) {
 
@@ -97,7 +110,7 @@ angular.module('sf_bikes')
                 
             } else {
                 context.beginPath();
-                context.arc(station.location[0], station.location[1], 9, 0, 2 * Math.PI, false);
+                context.arc(station.location[0], station.location[1], 9.5, 0, 2 * Math.PI, false);
 
                 var col = getColor(rebalance.bikes_available, station.dockcount);
                 context.fillStyle = col;
@@ -105,12 +118,12 @@ angular.module('sf_bikes')
 
                 context.beginPath();
                 context.fillStyle = "rgba(100, 100, 100, 0.3)";
-                context.arc(station.location[0], station.location[1], 9, 0, 2 * Math.PI, false);
+                context.arc(station.location[0], station.location[1], 9.5, 0, 2 * Math.PI, false);
                 context.fill();
 
                 context.beginPath();
                 context.fillStyle = col;
-                context.arc(station.location[0], station.location[1], 5.5, 0, 2 * Math.PI, false);
+                context.arc(station.location[0], station.location[1], 6, 0, 2 * Math.PI, false);
                 context.fill();
             }
         })
@@ -174,16 +187,11 @@ angular.module('sf_bikes')
 
             context.clearRect(0, 0, canvas.width, canvas.height);
             
-            
-            
-            context.lineWidth = 2;
-            
+            context.lineWidth = 2.5;
 
             trips.forEach(function(trip) {
                 drawTrip(elapsedRealTime, trip);
             });
-
-
 
             self.drawStations(stations, rebalancingJson, elapsedRealTime);
 
@@ -260,6 +268,7 @@ angular.module('sf_bikes')
                 aminTimeToMinute = 0.01 * speed;
             },
             refresh: function() {
+                self.resize();
                 calculateProjections(trips, stations);
                 if (cancel || !animate)
                     draw();
@@ -309,7 +318,7 @@ angular.module('sf_bikes')
 
     this.drawStation = function (station) {
         var location = projection([station.long, station.lat]); 
-        var circle = stationsGroup.circle(location[0] + 0.5, location[1] + 0.5, 9);
+        var circle = stationsGroup.circle(location[0] + 0.5, location[1] + 0.5, 9.5);
 
         circle.attr({
             fill: "#none",

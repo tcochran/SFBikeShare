@@ -11,14 +11,6 @@ angular.module('sf_bikes')
         restrict: 'A',
         link: function(scope, element, attrs, ctrl){
 
-
-            // var layer = new L.StamenTileLayer("toner-lite", {detectRetina: true});
-            // var map = new L.Map("element_id", {
-            //     center: new L.LatLng(37.7, -122.4),
-            //     zoom: 12
-            // });
-            
-
             leafletMap = L.map('map', {maxZoom: 15, minZoom: 13, detectRetina: true, scrollWheelZoom: false}).setView([37.7879, -122.4067], 14);
             // leafletMap.addLayer(layer);
             // add an OpenStreetMap tile layer
@@ -27,42 +19,31 @@ angular.module('sf_bikes')
                 detectRetina: true
             }).addTo(leafletMap);
 
-            // leafletMap = L.map('map').setView([37.7879, -122.4067], 14);
-            // L.tileLayer.grayscale('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            //     attribution: 'Map data &copy; <a href="http://openstreetmap.org/">OpenStreetMap</a> contributors',
-            //     maxZoom: 14, minZoom: 2, detectRetina: true
-            // }).addTo(leafletMap);
-
-
-
             scope.$watch('stations', function(newStations){
                 if (newStations == null)
                     return;
-
-                graphics.drawStations(leafletMap, scope.stations);
                 canvasGraphics.drawMap(leafletMap, newStations[0].landmark);
-
-                
-
-            })
-
-            leafletMap.on('zoomend', function() {
-                if (graphicsPromise != null)
-                    graphicsPromise.refresh();
-                graphics.drawStations(leafletMap, scope.stations);
-
-            })
-
-            leafletMap.on('dragend', function() {
-                graphicsPromise.refresh();
                 graphics.drawStations(leafletMap, scope.stations);
             })
 
-            leafletMap.on('drag', function() {
-                graphicsPromise.refresh();
-                graphics.drawStations(leafletMap, scope.stations);
-            })
-            
+            var events = ['zoomend', 'resize', 'dragend', 'drag'];
+
+            events.forEach(function(name) {
+
+                leafletMap.on(name, function() {
+                    if (graphicsPromise != null)
+                        graphicsPromise.refresh();
+                    graphics.drawStations(leafletMap, scope.stations);
+                });
+            });
+
+            // leafletMap.on('resize', function() {
+               
+            //         if (graphicsPromise != null)
+            //             graphicsPromise.refresh();
+            //         graphics.drawStations(leafletMap, scope.stations);
+            //     }); 
+            // })
 
             var graphicsPromise = null;
 
