@@ -2,9 +2,7 @@ angular.module('sf_bikes')
 
 .service('Settings', function() {
 
-
     this.save = function(settings) {
-
         localStorage.setItem("settings", JSON.stringify(settings));
     }
 

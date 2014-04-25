@@ -7,9 +7,6 @@ angular.module('sf_bikes')
             'dateList': '=',
         },
         link: function(scope, element) {
-
-
-
             
             element.popover({
                 html: true,

@@ -2,7 +2,6 @@ angular.module('sf_bikes')
 
 .service('Trips', function($http, Stations, $q){
 
-
     var findForDate = function(date) {
         var padLeft = function(pad, str) {
             return pad.substring(0, pad.length - str.length) + str

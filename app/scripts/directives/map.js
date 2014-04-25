@@ -12,8 +12,7 @@ angular.module('sf_bikes')
         link: function(scope, element, attrs, ctrl){
 
             leafletMap = L.map('map', {maxZoom: 15, minZoom: 13, detectRetina: true, scrollWheelZoom: false}).setView([37.7879, -122.4067], 14);
-            // leafletMap.addLayer(layer);
-            // add an OpenStreetMap tile layer
+
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 detectRetina: true
@@ -26,7 +25,7 @@ angular.module('sf_bikes')
                 graphics.drawStations(leafletMap, scope.stations);
             })
 
-            var events = ['zoomend', 'resize', 'dragend', 'drag'];
+            var events = ['zoomend', 'dragend', 'drag'];
 
             events.forEach(function(name) {
 
@@ -37,13 +36,13 @@ angular.module('sf_bikes')
                 });
             });
 
-            // leafletMap.on('resize', function() {
-               
-            //         if (graphicsPromise != null)
-            //             graphicsPromise.refresh();
-            //         graphics.drawStations(leafletMap, scope.stations);
-            //     }); 
-            // })
+            leafletMap.on('resize', function() {
+                if (graphicsPromise != null) {
+                    graphicsPromise.resize();
+                    graphicsPromise.refresh();
+                }
+                graphics.drawStations(leafletMap, scope.stations);
+            });
 
             var graphicsPromise = null;
 
@@ -106,70 +105,3 @@ angular.module('sf_bikes')
         }
     }
 })
-
-
-.directive('dailyTotals', function() {
-
-    return {
-        scope: {
-            totals: '=',
-            
-        },
-        link: function(scope, element) {
-            
-            data = scope.totals
-
-            var margin = {top: 50, right: 20, bottom: 30, left: 50},
-                width = 1400 - margin.left - margin.right,
-                height = 300 - margin.top - margin.bottom;
-
-            var x = d3.scale.linear()
-
-            var y = d3.scale.linear()
-                .range([height, 0]);
-
-            var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom");
-
-
-            var yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left")
-                .ticks(2);
-
-            var svg = d3.select(".bar-chart").append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(0" + margin.left + "," + margin.top + ")");
-              x.domain(data.map(function(d) { return d[0]; }));
-              y.domain([0, 1300]);
-
-              svg.append("g")
-                  .attr("class", "x axis")
-                  .attr("transform", "translate(0," + height + ")")
-                  .call(xAxis)
-                  .selectAll("text").remove();
-
-              svg.append("g")
-                  .attr("class", "y axis")
-                  .call(yAxis)
-                .append("text")
-                  .attr("transform", "rotate(-90)")
-                  .attr("y", 10)
-                  .attr("dy", "-1.91em")
-                  .style("text-anchor", "end");
-
-              svg.selectAll(".bar")
-                  .data(data)
-                .enter().append("rect")
-                  .attr("class", "bar")
-                  .attr("x", function(d) { return (x(d[0]) * 7)  ; }  )
-                  .attr("width", 6)
-                  .attr("y", function(d) { return y(d[1]); })
-                  .attr("height", function(d) { return height - y(d[1]); });
-
-        }
-    };
-});

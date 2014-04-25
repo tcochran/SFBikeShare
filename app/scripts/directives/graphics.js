@@ -129,8 +129,6 @@ angular.module('sf_bikes')
         })
     }
 
-
-
     this.drawTrips = function(tripsJson, stationsJson, rebalancingJson, speed, animate, cityName) {
         var elapsedRealTime = 0;
         var cancel = false;
@@ -268,7 +266,6 @@ angular.module('sf_bikes')
                 aminTimeToMinute = 0.01 * speed;
             },
             refresh: function() {
-                self.resize();
                 calculateProjections(trips, stations);
                 if (cancel || !animate)
                     draw();
@@ -305,8 +302,6 @@ angular.module('sf_bikes')
         labelsGroup.clear();
     };
 
-
-
     this.drawStations = function(leafletMap, stations) {
         self.drawMap(leafletMap);
 
@@ -314,7 +309,6 @@ angular.module('sf_bikes')
             self.drawStation(station);
         })
     }
-
 
     this.drawStation = function (station) {
         var location = projection([station.long, station.lat]); 

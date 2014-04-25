@@ -2,8 +2,6 @@ angular.module('sf_bikes')
 
 .service('Rebalances', function($http, Stations, $q) {
 
-    Stations.all()
-
     var findForDate = function(date) {
 
         var findStation = function(id){
