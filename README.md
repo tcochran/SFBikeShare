@@ -3,7 +3,7 @@ Ride distribution infographic
 
 http://tcochran.github.io/SFBikeShare
 
-Visualization of bay area bike share program. A data exploratory tool to highlight where bikes are going throughout the day.
+Visualization of bay area bike share program. A data exploratory tool to show which stations bikes are moving between over the course of a day.
 
 * Shows locations of bike stations 
 * Toggle between bay area cities and dates with trip data
